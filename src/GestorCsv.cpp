@@ -1,6 +1,6 @@
 #include "GestorCsv.h"
 // FIXME: LA LECTURA DE ARCHIVOS CON GETLINE FUNCIONA HORRIBLEMENTE, NO TENEMOS IDEA DE POR QUÉ
-vector<int> GestorCsv::leerProgramasCsv(string &ruta)
+vector<int> GestorCsv::leerProgramasCsv(string &ruta) const
 {
     vector<int> codigosSniesRetorno;
     ifstream archivoProgramasCsv(ruta);
@@ -32,332 +32,174 @@ vector<int> GestorCsv::leerProgramasCsv(string &ruta)
 
 // Complejidad: Este metodo tiene una alta complejidad ciclomática y computacional, reducir en metodos más pequeños
 // Estructuras de control anidadas profundamente.
-vector<vector<string>> GestorCsv::leerArchivoPrimera(string &rutaBase, string &ano, vector<int> &codigosSnies)
+vector<string> GestorCsv::leerFila(ifstream &archivo, int numColumnas) const
 {
-    // Estructura: La estructura es confusa.
-    // Mantenimiento: Se pueden mejorar los nombres de las variables.
-    vector<vector<string>> matrizResultado;
-    string rutaCompleta = rutaBase + ano + ".csv";
-    ifstream archivoPrimero(rutaCompleta);
-    if (!(archivoPrimero.is_open()))
-    {
-        cout << "Archivo " << rutaCompleta << " no se pudo abrir correctamente" << endl;
-    }
-    else
-    {
-        string fila;
-        string dato;
-        vector<string> vectorFila;
-        stringstream streamFila;
-        int columna;
-        vector<int>::iterator it;
+    vector<string> vectorFila(numColumnas);
+    string fila;
+    string dato;
+    stringstream streamFila;
 
-        // Primera iteracion del ciclo para guardar las etiquetas
-        getline(archivoPrimero, fila);
-        vectorFila = vector<string>(39);
+    if (getline(archivo, fila))
+    {
         streamFila = stringstream(fila);
-        columna = 0;
-        while ((getline(streamFila, dato, ';')))
+        int columna = 0;
+        while (getline(streamFila, dato, ';') && columna < numColumnas)
         {
             vectorFila[columna] = dato;
             columna++;
         }
-        matrizResultado.push_back(vectorFila);
+    }
 
-        // Leer el resto del archivo
-        while (getline(archivoPrimero, fila))
+    return vectorFila;
+}
+
+bool GestorCsv::verificarPrograma(const vector<string> &vectorFila, const vector<int> &codigosSnies) const
+{
+    if (vectorFila[12] != "Sin programa especifico")
+    {
+        return find(codigosSnies.begin(), codigosSnies.end(), stoi(vectorFila[12])) != codigosSnies.end();
+    }
+    return false;
+}
+
+void GestorCsv::leerFilasRestantes(ifstream &archivo, vector<vector<string>> &matrizResultado, int numFilas) const
+{
+    for (int j = 0; j < numFilas; j++)
+    {
+        matrizResultado.push_back(leerFila(archivo, 39));
+    }
+}
+
+vector<vector<string>> GestorCsv::leerArchivoPrimera(string &rutaBase, string &ano, vector<int> &codigosSnies) const
+{
+    vector<vector<string>> matrizResultado;
+    string rutaCompleta = rutaBase + ano + ".csv";
+    ifstream archivoPrimero(rutaCompleta);
+
+    if (!archivoPrimero.is_open())
+    {
+        cout << "Archivo " << rutaCompleta << " no se pudo abrir correctamente" << endl;
+        return matrizResultado;
+    }
+
+    // Leer etiquetas
+    matrizResultado.push_back(leerFila(archivoPrimero, 39));
+
+    // Leer filas de datos
+    while (archivoPrimero)
+    {
+        vector<string> vectorFila = leerFila(archivoPrimero, 13);
+
+        if (verificarPrograma(vectorFila, codigosSnies))
         {
-            streamFila = stringstream(fila);
-            columna = 0;
-            while ((getline(streamFila, dato, ';')) && (columna < 13))
-            {
-                vectorFila[columna] = dato;
-                columna++;
-            }
-
-            // Verificamos que la fila no sea una fila de error
-            if (vectorFila[12] != "Sin programa especifico")
-            {
-                it = find(codigosSnies.begin(), codigosSnies.end(), stoi(vectorFila[12]));
-            }
-            else
-            {
-                it = codigosSnies.end();
-            }
-
-            // Verificar si hace parte de los programas que me interesan
-            if (it != codigosSnies.end()) // Caso donde si estaba dentro de los programas que me interesan
-            {
-                // Termino de leer y guardar primera fila
-                vectorFila[columna] = dato; // Guardamos el dato que habiamos geteado justo antes de hacer la verificacion
-                columna++;
-                while ((getline(streamFila, dato, ';')))
-                {
-                    vectorFila[columna] = dato;
-                    columna++;
-                }
-                matrizResultado.push_back(vectorFila);
-
-                // Leo y guardo filas restantes
-                for (int j = 0; j < 3; j++)
-                {
-                    getline(archivoPrimero, fila);
-                    streamFila = stringstream(fila);
-                    columna = 0;
-                    while ((getline(streamFila, dato, ';')))
-                    {
-                        vectorFila[columna] = dato;
-                        columna++;
-                    }
-                    matrizResultado.push_back(vectorFila);
-                }
-            }
-            // Si es de los programas que no me interesan, sigo a la siguiente fila, sin guardar la fila en la matriz de resultados
+            matrizResultado.push_back(vectorFila);
+            leerFilasRestantes(archivoPrimero, matrizResultado, 3);
         }
     }
 
     archivoPrimero.close();
-
-    /*// Imprimir matriz resultado para verificaciones
-    for (int h = 0; h < matrizResultado.size(); h++)
-    {
-        for (int k = 0; k < matrizResultado[h].size(); k++)
-        {
-            cout << matrizResultado[h][k];
-            if (k != (matrizResultado[h].size() - 1))
-            {
-                cout << ";";
-            }
-        }
-        cout << endl;
-    }*/
     return matrizResultado;
 }
 
 // Complejidad: Este metodo tiene una alta complejidad ciclomática y computacional, reducir en metodos más pequeños
 // Parece hacer lo mismo que el metodo leerArchivoPrimera
-vector<vector<string>> GestorCsv::leerArchivoSegunda(string &rutaBase, string &ano, vector<int> &codigosSnies)
+vector<vector<string>> GestorCsv::leerArchivoSegunda(const string &rutaBase, const string &ano, const vector<int> &codigosSnies) const
 {
     vector<vector<string>> matrizResultado;
     string rutaCompleta = rutaBase + ano + ".csv";
     ifstream archivoSegundo(rutaCompleta);
-    if (!(archivoSegundo.is_open()))
+
+    if (!archivoSegundo.is_open())
     {
         cout << "Archivo " << rutaCompleta << " no se pudo abrir correctamente" << endl;
+        return matrizResultado;
     }
-    else
+
+    // Leer etiquetas (primera fila)
+    matrizResultado.push_back(leerFila(archivoSegundo, 13));
+
+    // Leer el resto del archivo
+    while (archivoSegundo)
     {
-        string fila;
-        string dato;
-        vector<string> vectorFila(6);
-        stringstream streamFila;
-        int columnaArchivo;
-        int columnaVector;
-        vector<int>::iterator it;
+        vector<string> vectorFila = leerFila(archivoSegundo, 13);
 
-        // Nos saltamos las etiquetas para no interferir en el bucle
-        getline(archivoSegundo, fila);
-
-        // Leemos las filas
-        while (getline(archivoSegundo, fila))
+        if (!vectorFila.empty() && verificarPrograma(vectorFila, codigosSnies))
         {
-            streamFila = stringstream(fila);
-            columnaArchivo = 0;
-            columnaVector = 0;
-            while ((getline(streamFila, dato, ';')) && (columnaArchivo < 13))
-            {
-                if (columnaArchivo == 12)
-                {
-                    vectorFila[columnaVector] = dato;
-                    columnaVector++;
-                }
-                columnaArchivo++;
-            }
-
-            // Verificamos que la fila no sea una fila de error
-            if (vectorFila[0] != "Sin programa especifico")
-            {
-                it = find(codigosSnies.begin(), codigosSnies.end(), stoi(vectorFila[0]));
-            }
-            else
-            {
-                it = codigosSnies.end();
-            }
-
-            // Verificar si hace parte de los programas que me interesan
-            if (it != codigosSnies.end()) // Caso cuando SI es parte de los que me interesan
-            {
-                // Termino de leer y guardar primera fila
-                columnaArchivo++; // Esto se debe a la iteracion en que hacemos getline sin subirle a la columaArchivo porque nos salimos del bucle
-                while (getline(streamFila, dato, ';'))
-                {
-                    if (columnaArchivo >= 34)
-                    {
-                        vectorFila[columnaVector] = dato;
-                        columnaVector++;
-                    }
-                    columnaArchivo++;
-                }
-                matrizResultado.push_back(vectorFila);
-
-                // Leer las otras 3 filas
-                for (int i = 0; i < 3; i++)
-                {
-                    getline(archivoSegundo, fila);
-                    streamFila = stringstream(fila);
-                    columnaArchivo = 0;
-                    columnaVector = 0;
-                    while (getline(streamFila, dato, ';'))
-                    {
-                        if ((columnaArchivo >= 34) || (columnaArchivo == 12))
-                        {
-                            vectorFila[columnaVector] = dato;
-                            columnaVector++;
-                        }
-                        columnaArchivo++;
-                    }
-                    matrizResultado.push_back(vectorFila);
-                }
-            }
-            // Cuando no me interesa no hago nada
+            matrizResultado.push_back(vectorFila);
+            agregarFilasAdicionales(archivoSegundo, matrizResultado, 3, 13);
         }
     }
 
-    /*
-    Ejemplo de matrizResultado: (No tendría las etiquetas incluidas)
-    CodigoSnies;IdSexo;SexoString;Ano;Semestre;Admitidos
-    1; 1; Masculino; 2022; 1, 56
-    */
     archivoSegundo.close();
-
-    /*// Imprimir matriz resultado para verificaciones
-    for (int h = 0; h < matrizResultado.size(); h++)
-    {
-        for (int k = 0; k < matrizResultado[h].size(); k++)
-        {
-            cout << matrizResultado[h][k];
-            if (k != (matrizResultado[h].size() - 1))
-            {
-                cout << ";";
-            }
-        }
-        cout << endl;
-    }*/
     return matrizResultado;
 }
 
-vector<vector<string>> GestorCsv::leerArchivo(string &rutaBase, string &ano, vector<int> &codigosSnies, int colmunaCodigoSnies)
+// Función para agregar filas adicionales al archivo
+void GestorCsv::agregarFilasAdicionales(ifstream &archivo, vector<vector<string>> &matrizResultado, int numFilas, int numColumnas) const
+{
+    string fila;
+    string dato;
+    for (int j = 0; j < numFilas; j++)
+    {
+        getline(archivo, fila);
+        stringstream streamFila(fila);
+        vector<string> vectorFila(numColumnas);
+        int columna = 0;
+
+        while ((getline(streamFila, dato, ';')) && (columna < numColumnas))
+        {
+            vectorFila[columna] = dato;
+            columna++;
+        }
+        matrizResultado.push_back(vectorFila);
+    }
+}
+
+
+vector<vector<string>> GestorCsv::leerArchivo(string &rutaBase, string &ano, vector<int> &codigosSnies, int columnaCodigoSnies) const
 {
     vector<vector<string>> matrizResultado;
     string rutaCompleta = rutaBase + ano + ".csv";
-    ifstream archivoSegundo(rutaCompleta);
-    if (!(archivoSegundo.is_open()))
+    ifstream archivo(rutaCompleta);
+
+    if (!archivo.is_open())
     {
         cout << "Archivo " << rutaCompleta << " no se pudo abrir correctamente" << endl;
+        return matrizResultado;
     }
-    else
+
+    // Leer etiquetas
+    matrizResultado.push_back(leerFila(archivo, 39));
+
+    // Leer filas de datos
+    while (archivo)
     {
-        string fila;
-        string dato;
-        vector<string> vectorFila(2);
-        stringstream streamFila;
-        int columnaArchivo;
-        int columnaVector;
-        vector<int>::iterator it;
+        vector<string> vectorFila = leerFila(archivo, columnaCodigoSnies + 1);
 
-        // Nos saltamos las etiquetas para no interferir en el bucle
-        getline(archivoSegundo, fila);
-
-        // Leemos las filas
-        while (getline(archivoSegundo, fila))
+        // Verificar si el programa es válido
+        if (verificarPrograma(vectorFila, codigosSnies, columnaCodigoSnies))
         {
-            streamFila = stringstream(fila);
-            columnaArchivo = 0;
-            columnaVector = 0;
-            while ((getline(streamFila, dato, ';')) && (columnaArchivo < (colmunaCodigoSnies + 1)))
-            {
-                if (columnaArchivo == colmunaCodigoSnies)
-                {
-                    vectorFila[columnaVector] = dato;
-                    columnaVector++;
-                }
-                columnaArchivo++;
-            }
-
-            // Verificamos que la fila no sea una fila de error
-            if (vectorFila[0] != "Sin programa especifico")
-            {
-                it = find(codigosSnies.begin(), codigosSnies.end(), stoi(vectorFila[0]));
-            }
-            else
-            {
-                it = codigosSnies.end();
-            }
-
-            // Verificar si hace parte de los programas que me interesan
-            if (it != codigosSnies.end()) // Caso cuando SI es parte de los que me interesan
-            {
-                // Terminar de leer primera fila
-                while (getline(streamFila, dato, ';'))
-                {
-                }
-                vectorFila[columnaVector] = dato;
-                matrizResultado.push_back(vectorFila);
-
-                // Leer las otras 3 filas
-                for (int i = 0; i < 3; i++)
-                {
-                    getline(archivoSegundo, fila);
-                    streamFila = stringstream(fila);
-                    columnaArchivo = 0;
-                    columnaVector = 0;
-                    while (getline(streamFila, dato, ';'))
-                    {
-                        if (columnaArchivo == colmunaCodigoSnies)
-                        {
-                            vectorFila[columnaVector] = dato;
-                            columnaVector++;
-                        }
-                        columnaArchivo++;
-                    }
-                    vectorFila[columnaVector] = dato;
-                    matrizResultado.push_back(vectorFila);
-                }
-            }
-            else // Caso cuando NO es parte de los que me interesan
-            {
-                /*// Saltarme las 3 siguientes filas con mismo codigo Snies
-                for (int j = 0; j < 3; j++)
-                {
-                    getline(archivoSegundo, fila);
-                }*/
-            }
+            matrizResultado.push_back(vectorFila);
+            agregarFilasAdicionales(archivo, matrizResultado, 3, columnaCodigoSnies + 1);
         }
     }
 
-    /*
-    Ejemplo de matrizResultado: (No tendría las etiquetas incluidas)
-    CodigoSnies;DatoExtradelArchivo
-    12;5
-    */
-    archivoSegundo.close();
-    /*// Imprimir matriz resultado para verificaciones
-    for (int h = 0; h < matrizResultado.size(); h++)
-    {
-        for (int k = 0; k < matrizResultado[h].size(); k++)
-        {
-            cout << matrizResultado[h][k];
-            if (k != (matrizResultado[h].size() - 1))
-            {
-                cout << ";";
-            }
-        }
-        cout << endl;
-    }*/
+    archivo.close();
     return matrizResultado;
 }
 
-bool GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas)
+// Verificar si la fila corresponde a un programa válido
+bool GestorCsv::verificarPrograma(const vector<string> &vectorFila, const vector<int> &codigosSnies, int columnaCodigoSnies) const
+{
+    if (vectorFila[columnaCodigoSnies] != "Sin programa especifico")
+    {
+        return find(codigosSnies.begin(), codigosSnies.end(), stoi(vectorFila[columnaCodigoSnies])) != codigosSnies.end();
+    }
+    return false;
+}
+
+
+bool GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas) const
 {
     // Este bool nos ayudará a saber si se creo exitosamente el archivo
     bool estadoCreacion = false;
@@ -441,7 +283,7 @@ bool GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapade
     return estadoCreacion;
 }
 
-bool GestorCsv::crearArchivoBuscados(string &ruta, list<ProgramaAcademico *> &programasBuscados, vector<string> etiquetasColumnas)
+bool GestorCsv::crearArchivoBuscados(string &ruta, list<ProgramaAcademico *> &programasBuscados, vector<string> etiquetasColumnas) const
 {
     // Este bool nos ayudará a saber si se creo exitosamente el archivo
     bool estadoCreacion = false;
@@ -526,37 +368,38 @@ bool GestorCsv::crearArchivoBuscados(string &ruta, list<ProgramaAcademico *> &pr
     return estadoCreacion;
 }
 
-bool GestorCsv::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir)
+bool GestorCsv::crearArchivoExtra(string &ruta, const vector<vector<string>> &datosAImprimir) const
 {
-    // Este bool nos ayudará a saber si se creo el archivo exitosamente
-    bool estadoCreacion = false;
     string rutaCompleta = ruta + "extras.csv";
     ofstream archivoExtra(rutaCompleta);
-    if (archivoExtra.is_open())
-    {
-        // Imprimimos la matriz de datos que queremos imprimir
-        for (int i = 0; i < datosAImprimir.size(); i++)
-        {
-            // Imprimimos cada fila
-            for (int j = 0; j < datosAImprimir[i].size(); j++)
-            {
-                // Imprimimos cada dato separado por ';'
-                archivoExtra << datosAImprimir[i][j];
-                if (j != (datosAImprimir[i].size() - 1))
-                {
-                    archivoExtra << ";";
-                }
-            }
-            // Saltamos de linea al terminar una fila
-            archivoExtra << endl;
-        }
 
-        // Cambiamos el valor del booleano si logramos llegar hasta este punto
-        estadoCreacion = true;
-        // Imprimimos ruta donde quedo el archivo
-        cout << "Archivo Creado en: " << rutaCompleta << endl;
+    if (!archivoExtra.is_open())
+    {
+        cout << "No se pudo abrir el archivo: " << rutaCompleta << endl;
+        return false;
     }
 
+    // Imprimir las filas en el archivo
+    for (const auto &fila : datosAImprimir)
+    {
+        imprimirFila(archivoExtra, fila);
+    }
+
+    cout << "Archivo Creado en: " << rutaCompleta << endl;
     archivoExtra.close();
-    return estadoCreacion;
+    return true;
+}
+
+// Nueva función para imprimir una fila
+void GestorCsv::imprimirFila(ofstream &archivo, const vector<string> &fila) const
+{
+    for (size_t i = 0; i < fila.size(); ++i)
+    {
+        archivo << fila[i];
+        if (i < fila.size() - 1)
+        {
+            archivo << ";";
+        }
+    }
+    archivo << endl;
 }
