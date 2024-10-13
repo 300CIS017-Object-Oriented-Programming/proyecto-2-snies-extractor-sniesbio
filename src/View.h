@@ -20,9 +20,9 @@ public:
     bool mostrarPantallaBienvenido();
     void mostrarDatosExtra();
     void buscarPorPalabraClaveYFormacion();
-    void salir();
+    void salir()const;
     // Recomendación Linter: La función isConvetibleToInt debería ser privada.
-    bool isConvetibleToInt(const string &);
+    bool isConvetibleToInt(const string &)const;
 };
 
 #endif
