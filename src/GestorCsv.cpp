@@ -1,84 +1,80 @@
 #include "GestorCsv.h"
-// FIXME: LA LECTURA DE ARCHIVOS CON GETLINE FUNCIONA HORRIBLEMENTE, NO TENEMOS IDEA DE POR QUÉ
-vector<int> GestorCsv::leerProgramasCsv(string &ruta) const
+#include <stdexcept>
+#include <iostream>
+#include <string_view>
+#include <utility>
+
+std::vector<int> GestorCsv::leerProgramasCsv(const std::string &ruta) const
 {
-    vector<int> codigosSniesRetorno;
-    ifstream archivoProgramasCsv(ruta);
-    if (!(archivoProgramasCsv.is_open()))
+    std::vector<int> codigosSniesRetorno;
+    std::ifstream archivoProgramasCsv(ruta);
+    if (!archivoProgramasCsv.is_open())
     {
-        cout << "Archivo " << ruta << " no se pudo abrir correctamente" << endl;
+        std::cerr << "Archivo " << ruta << " no se pudo abrir correctamente" << std::endl;
+        return codigosSniesRetorno;
     }
-    else
+
+    std::string linea;
+    std::string dato;
+    // Leer los programas, comenzando desde la segunda línea (se asume que la primera es un encabezado)
+    std::getline(archivoProgramasCsv, linea);  // Saltar la primera línea
+    while (std::getline(archivoProgramasCsv, linea))
     {
-        string linea;
-        string dato;
-        // Mantenimiento (Revisión): Se puede mejorar la lectura de archivos con getline y
-        // No debería saltarse la primera linea para así determinar qué está leyendo.
-        // Saltarse la primera linea
-        getline(archivoProgramasCsv, linea);
-        // Leer los programas
-        while (getline(archivoProgramasCsv, linea))
+        std::stringstream streamLinea(linea);
+        std::getline(streamLinea, dato, ';');
+        try
         {
-            stringstream streamLinea(linea);
-            getline(streamLinea, dato, ';');
-            // Manteniemiento: Se puede mejorar la forma de leer los datos de la línea y
-            // los nombres de los métodos y variables.
-            codigosSniesRetorno.push_back(stoi(dato));
+            codigosSniesRetorno.push_back(std::stoi(dato));  // Convertir el dato a entero y añadirlo al vector
+        }
+        catch (const std::invalid_argument &)
+        {
+            std::cerr << "Error al convertir el dato a entero: " << dato << std::endl;
         }
     }
+
     archivoProgramasCsv.close();
     return codigosSniesRetorno;
 }
 
-// Complejidad: Este metodo tiene una alta complejidad ciclomática y computacional, reducir en metodos más pequeños
-// Estructuras de control anidadas profundamente.
-vector<string> GestorCsv::leerFila(ifstream &archivo, int numColumnas) const
+// Función genérica para leer archivos y reutilizar en leerArchivoPrimera y leerArchivoSegunda
+std::vector<std::vector<std::string>> GestorCsv::leerArchivoComun(const std::string &rutaBase, const std::string &ano, const std::vector<int> &codigosSnies, int numColumnas, int filasAdicionales) const
 {
-    vector<string> vectorFila(numColumnas);
-    string fila;
-    string dato;
-    stringstream streamFila;
+    std::vector<std::vector<std::string>> matrizResultado;
+    std::string rutaCompleta = rutaBase + ano + ".csv";
+    std::ifstream archivo(rutaCompleta);
 
-    if (getline(archivo, fila))
+    if (!archivo.is_open())
     {
-        streamFila = stringstream(fila);
-        int columna = 0;
-        while (getline(streamFila, dato, ';') && columna < numColumnas)
+        std::cerr << "Archivo " << rutaCompleta << " no se pudo abrir correctamente" << std::endl;
+        return matrizResultado;
+    }
+
+    // Leer etiquetas (primera fila)
+    matrizResultado.push_back(leerFila(archivo, numColumnas));
+
+    // Leer filas de datos
+    while (archivo)
+    {
+        std::vector<std::string> vectorFila = leerFila(archivo, numColumnas);
+
+        if (!vectorFila.empty() && verificarPrograma(vectorFila, codigosSnies))
         {
-            vectorFila[columna] = dato;
-            columna++;
+            matrizResultado.push_back(vectorFila);
+            agregarFilasAdicionales(archivo, matrizResultado, filasAdicionales, numColumnas);
         }
     }
 
-    return vectorFila;
+    archivo.close();
+    return matrizResultado;
 }
 
-bool GestorCsv::verificarPrograma(const vector<string> &vectorFila, const vector<int> &codigosSnies) const
-{
-    if (vectorFila[12] != "Sin programa especifico")
-    {
-        return find(codigosSnies.begin(), codigosSnies.end(), stoi(vectorFila[12])) != codigosSnies.end();
-    }
-    return false;
-}
+std::vector<std::vector<std::string>> GestorCsv::leerArchivoPrimera(const std::string &rutaBase, const std::string &ano, const std::vector<int> &codigosSnies) const {
+    std::vector<std::vector<std::string>> matrizResultado;
+    std::string rutaCompleta = rutaBase + ano + ".csv";
+    std::ifstream archivoPrimero(rutaCompleta);
 
-void GestorCsv::leerFilasRestantes(ifstream &archivo, vector<vector<string>> &matrizResultado, int numFilas) const
-{
-    for (int j = 0; j < numFilas; j++)
-    {
-        matrizResultado.push_back(leerFila(archivo, 39));
-    }
-}
-
-vector<vector<string>> GestorCsv::leerArchivoPrimera(string &rutaBase, string &ano, vector<int> &codigosSnies) const
-{
-    vector<vector<string>> matrizResultado;
-    string rutaCompleta = rutaBase + ano + ".csv";
-    ifstream archivoPrimero(rutaCompleta);
-
-    if (!archivoPrimero.is_open())
-    {
-        cout << "Archivo " << rutaCompleta << " no se pudo abrir correctamente" << endl;
+    if (!archivoPrimero.is_open()) {
+        std::cerr << "Archivo " << rutaCompleta << " no se pudo abrir correctamente" << std::endl;
         return matrizResultado;
     }
 
@@ -86,12 +82,10 @@ vector<vector<string>> GestorCsv::leerArchivoPrimera(string &rutaBase, string &a
     matrizResultado.push_back(leerFila(archivoPrimero, 39));
 
     // Leer filas de datos
-    while (archivoPrimero)
-    {
-        vector<string> vectorFila = leerFila(archivoPrimero, 13);
+    while (archivoPrimero) {
+        std::vector<std::string> vectorFila = leerFila(archivoPrimero, 13);
 
-        if (verificarPrograma(vectorFila, codigosSnies))
-        {
+        if (verificarPrograma(vectorFila, codigosSnies)) {
             matrizResultado.push_back(vectorFila);
             leerFilasRestantes(archivoPrimero, matrizResultado, 3);
         }
@@ -101,164 +95,101 @@ vector<vector<string>> GestorCsv::leerArchivoPrimera(string &rutaBase, string &a
     return matrizResultado;
 }
 
-// Complejidad: Este metodo tiene una alta complejidad ciclomática y computacional, reducir en metodos más pequeños
-// Parece hacer lo mismo que el metodo leerArchivoPrimera
-vector<vector<string>> GestorCsv::leerArchivoSegunda(const string &rutaBase, const string &ano, const vector<int> &codigosSnies) const
+// Refactorización de leerArchivoSegunda
+std::vector<std::vector<std::string>> GestorCsv::leerArchivoSegunda(const std::string &rutaBase, const std::string &ano, const std::vector<int> &codigosSnies) const
 {
-    vector<vector<string>> matrizResultado;
-    string rutaCompleta = rutaBase + ano + ".csv";
-    ifstream archivoSegundo(rutaCompleta);
-
-    if (!archivoSegundo.is_open())
-    {
-        cout << "Archivo " << rutaCompleta << " no se pudo abrir correctamente" << endl;
-        return matrizResultado;
-    }
-
-    // Leer etiquetas (primera fila)
-    matrizResultado.push_back(leerFila(archivoSegundo, 13));
-
-    // Leer el resto del archivo
-    while (archivoSegundo)
-    {
-        vector<string> vectorFila = leerFila(archivoSegundo, 13);
-
-        if (!vectorFila.empty() && verificarPrograma(vectorFila, codigosSnies))
-        {
-            matrizResultado.push_back(vectorFila);
-            agregarFilasAdicionales(archivoSegundo, matrizResultado, 3, 13);
-        }
-    }
-
-    archivoSegundo.close();
-    return matrizResultado;
+    return leerArchivoComun(rutaBase, ano, codigosSnies, 13, 3);
 }
 
-// Función para agregar filas adicionales al archivo
-void GestorCsv::agregarFilasAdicionales(ifstream &archivo, vector<vector<string>> &matrizResultado, int numFilas, int numColumnas) const
+// Función para leer una fila del archivo CSV
+std::vector<std::string> GestorCsv::leerFila(std::ifstream &archivo, int numColumnas) const
 {
-    string fila;
-    string dato;
-    for (int j = 0; j < numFilas; j++)
+    std::vector<std::string> vectorFila(numColumnas);
+    if (std::string fila; std::getline(archivo, fila))
     {
-        getline(archivo, fila);
-        stringstream streamFila(fila);
-        vector<string> vectorFila(numColumnas);
+        std::stringstream streamFila(fila);
+        std::string dato;
         int columna = 0;
-
-        while ((getline(streamFila, dato, ';')) && (columna < numColumnas))
+        while (std::getline(streamFila, dato, ';') && columna < numColumnas)
         {
-            vectorFila[columna] = dato;
+            vectorFila[columna] = std::move(dato);  // Usar move para evitar copiar el dato
             columna++;
         }
-        matrizResultado.push_back(vectorFila);
-    }
-}
-
-
-vector<vector<string>> GestorCsv::leerArchivo(string &rutaBase, string &ano, vector<int> &codigosSnies, int columnaCodigoSnies) const
-{
-    vector<vector<string>> matrizResultado;
-    string rutaCompleta = rutaBase + ano + ".csv";
-    ifstream archivo(rutaCompleta);
-
-    if (!archivo.is_open())
-    {
-        cout << "Archivo " << rutaCompleta << " no se pudo abrir correctamente" << endl;
-        return matrizResultado;
     }
 
-    // Leer etiquetas
-    matrizResultado.push_back(leerFila(archivo, 39));
-
-    // Leer filas de datos
-    while (archivo)
-    {
-        vector<string> vectorFila = leerFila(archivo, columnaCodigoSnies + 1);
-
-        // Verificar si el programa es válido
-        if (verificarPrograma(vectorFila, codigosSnies, columnaCodigoSnies))
-        {
-            matrizResultado.push_back(vectorFila);
-            agregarFilasAdicionales(archivo, matrizResultado, 3, columnaCodigoSnies + 1);
-        }
-    }
-
-    archivo.close();
-    return matrizResultado;
+    return vectorFila;
 }
 
 // Verificar si la fila corresponde a un programa válido
-bool GestorCsv::verificarPrograma(const vector<string> &vectorFila, const vector<int> &codigosSnies, int columnaCodigoSnies) const
+bool GestorCsv::verificarPrograma(const std::vector<std::string> &vectorFila, const std::vector<int> &codigosSnies) const
 {
-    if (vectorFila[columnaCodigoSnies] != "Sin programa especifico")
+    if (vectorFila[12] != "Sin programa especifico")
     {
-        return find(codigosSnies.begin(), codigosSnies.end(), stoi(vectorFila[columnaCodigoSnies])) != codigosSnies.end();
+        return std::find(codigosSnies.begin(), codigosSnies.end(), std::stoi(vectorFila[12])) != codigosSnies.end();
     }
     return false;
 }
 
-
-bool GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas) const
+// Función para agregar filas adicionales al archivo
+void GestorCsv::agregarFilasAdicionales(std::ifstream &archivo, std::vector<std::vector<std::string>> &matrizResultado, int numFilas, int numColumnas) const
 {
-    // Este bool nos ayudará a saber si se creo exitosamente el archivo
-    bool estadoCreacion = false;
-    string rutaCompleta = ruta + "resultados.csv";
-    ofstream archivoResultados(rutaCompleta);
-    if (archivoResultados.is_open())
+    for (int j = 0; j < numFilas; j++)
     {
-        // Imprimimos en el archivo las etiquetas (Primera fila)
-        for (int i = 0; i < etiquetasColumnas.size(); i++)
-        {
-            archivoResultados << etiquetasColumnas[i] << ";";
+        matrizResultado.push_back(leerFila(archivo, numColumnas));
+    }
+}
+
+// Función para crear archivos CSV
+bool GestorCsv::crearArchivo(const std::string &ruta, const std::map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, const std::vector<std::string> &etiquetasColumnas) const {
+    bool estadoCreacion = false;
+    std::string rutaCompleta = ruta + "resultados.csv";
+
+    // Usando init-statement para la apertura del archivo
+    if (std::ofstream archivoResultados(rutaCompleta); archivoResultados.is_open()) {
+        // Imprimir las etiquetas (Primera fila)
+        for (const auto &etiqueta : etiquetasColumnas) {
+            archivoResultados << etiqueta << ";";
         }
-        archivoResultados << "GRADUADOS;INSCRITOS;MATRICULADOS;NEOS" << endl;
+        archivoResultados << "GRADUADOS;INSCRITOS;MATRICULADOS;NEOS" << std::endl;
 
-        map<int, ProgramaAcademico *>::iterator it;
-        // Leemos todos los programas del mapa para imprimirlos en el archivo
-        for (it = mapadeProgramasAcademicos.begin(); it != mapadeProgramasAcademicos.end(); it++)
-        {
-            // Imprimimos cada uno de los 8 consolidados por programa
-            for (int i = 0; i < 8; i++)
-            {
-                // Imprimimos toda la información base del programa academico
-                archivoResultados << (it->second)->getCodigoDeLaInstitucion() << ";";
-                archivoResultados << (it->second)->getIesPadre() << ";";
-                archivoResultados << (it->second)->getInstitucionDeEducacionSuperiorIes() << ";";
-                archivoResultados << (it->second)->getPrincipalOSeccional() << ";";
-                archivoResultados << (it->second)->getIdSectorIes() << ";";
-                archivoResultados << (it->second)->getSectorIes() << ";";
-                archivoResultados << (it->second)->getIdCaracter() << ";";
-                archivoResultados << (it->second)->getCaracterIes() << ";";
-                archivoResultados << (it->second)->getCodigoDelDepartamentoIes() << ";";
-                archivoResultados << (it->second)->getDepartamentoDeDomicilioDeLaIes() << ";";
-                archivoResultados << (it->second)->getCodigoDelMunicipioIes() << ";";
-                archivoResultados << (it->second)->getMunicipioDeDomicilioDeLaIes() << ";";
-                archivoResultados << (it->second)->getCodigoSniesDelPrograma() << ";";
-                archivoResultados << (it->second)->getProgramaAcademico() << ";";
-                archivoResultados << (it->second)->getIdNivelAcademico() << ";";
-                archivoResultados << (it->second)->getNivelAcademico() << ";";
-                archivoResultados << (it->second)->getIdNivelDeFormacion() << ";";
-                archivoResultados << (it->second)->getNivelDeFormacion() << ";";
-                archivoResultados << (it->second)->getIdMetodologia() << ";";
-                archivoResultados << (it->second)->getMetodologia() << ";";
-                archivoResultados << (it->second)->getIdArea() << ";";
-                archivoResultados << (it->second)->getAreaDeConocimiento() << ";";
-                archivoResultados << (it->second)->getIdNucleo() << ";";
-                archivoResultados << (it->second)->getNucleoBasicoDelConocimientoNbc() << ";";
-                archivoResultados << (it->second)->getIdCineCampoAmplio() << ";";
-                archivoResultados << (it->second)->getDescCineCampoAmplio() << ";";
-                archivoResultados << (it->second)->getIdCineCampoEspecifico() << ";";
-                archivoResultados << (it->second)->getDescCineCampoEspecifico() << ";";
-                archivoResultados << (it->second)->getIdCineCodigoDetallado() << ";";
-                archivoResultados << (it->second)->getDescCineCodigoDetallado() << ";";
-                archivoResultados << (it->second)->getCodigoDelDepartamentoPrograma() << ";";
-                archivoResultados << (it->second)->getDepartamentoDeOfertaDelPrograma() << ";";
-                archivoResultados << (it->second)->getCodigoDelMunicipioPrograma() << ";";
-                archivoResultados << (it->second)->getMunicipioDeOfertaDelPrograma() << ";";
+        for (const auto &[key, programa] : mapadeProgramasAcademicos) {
+            for (int i = 0; i < 8; i++) {
+                const Consolidado *consolidadoActual = programa->getConsolidado(i);
+                archivoResultados << programa->getCodigoDeLaInstitucion() << ";";
+                archivoResultados << programa->getIesPadre() << ";";
+                archivoResultados << programa->getInstitucionDeEducacionSuperiorIes() << ";";
+                archivoResultados << programa->getPrincipalOSeccional() << ";";
+                archivoResultados << programa->getIdSectorIes() << ";";
+                archivoResultados << programa->getSectorIes() << ";";
+                archivoResultados << programa->getIdCaracter() << ";";
+                archivoResultados << programa->getCaracterIes() << ";";
+                archivoResultados << programa->getCodigoDelDepartamentoIes() << ";";
+                archivoResultados << programa->getDepartamentoDeDomicilioDeLaIes() << ";";
+                archivoResultados << programa->getCodigoDelMunicipioIes() << ";";
+                archivoResultados << programa->getMunicipioDeDomicilioDeLaIes() << ";";
+                archivoResultados << programa->getCodigoSniesDelPrograma() << ";";
+                archivoResultados << programa->getProgramaAcademico() << ";";
+                archivoResultados << programa->getIdNivelAcademico() << ";";
+                archivoResultados << programa->getNivelAcademico() << ";";
+                archivoResultados << programa->getIdNivelDeFormacion() << ";";
+                archivoResultados << programa->getNivelDeFormacion() << ";";
+                archivoResultados << programa->getIdMetodologia() << ";";
+                archivoResultados << programa->getMetodologia() << ";";
+                archivoResultados << programa->getIdArea() << ";";
+                archivoResultados << programa->getAreaDeConocimiento() << ";";
+                archivoResultados << programa->getIdNucleo() << ";";
+                archivoResultados << programa->getNucleoBasicoDelConocimientoNbc() << ";";
+                archivoResultados << programa->getIdCineCampoAmplio() << ";";
+                archivoResultados << programa->getDescCineCampoAmplio() << ";";
+                archivoResultados << programa->getIdCineCampoEspecifico() << ";";
+                archivoResultados << programa->getDescCineCampoEspecifico() << ";";
+                archivoResultados << programa->getIdCineCodigoDetallado() << ";";
+                archivoResultados << programa->getDescCineCodigoDetallado() << ";";
+                archivoResultados << programa->getCodigoDelDepartamentoPrograma() << ";";
+                archivoResultados << programa->getDepartamentoDeOfertaDelPrograma() << ";";
+                archivoResultados << programa->getCodigoDelMunicipioPrograma() << ";";
+                archivoResultados << programa->getMunicipioDeOfertaDelPrograma() << ";";
 
-                // Imprimimos la información del consolidado: (ID SEXO;SEXO;AÑO;SEMESTRE;ADMITIDOS;GRADUADOS;INSCRITOS;MATRICULADOS;NEOS)
-                Consolidado *consolidadoActual = (it->second)->getConsolidado(i);
                 archivoResultados << consolidadoActual->getIdSexo() << ";";
                 archivoResultados << consolidadoActual->getSexo() << ";";
                 archivoResultados << consolidadoActual->getAno() << ";";
@@ -267,131 +198,21 @@ bool GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapade
                 archivoResultados << consolidadoActual->getGraduados() << ";";
                 archivoResultados << consolidadoActual->getInscritos() << ";";
                 archivoResultados << consolidadoActual->getMatriculados() << ";";
-                archivoResultados << consolidadoActual->getMatriculadosPrimerSemestre();
-                // Saltamos de linea para la siguiente fila
-                archivoResultados << endl;
+                archivoResultados << consolidadoActual->getMatriculadosPrimerSemestre() << std::endl;
             }
         }
 
-        // Cambiamos el valor del booleano si logramos llegar hasta este punto
         estadoCreacion = true;
-        // Imprimimos ruta donde quedo el archivo
-        cout << "Archivo Creado en: " << rutaCompleta << endl;
+        std::cout << "Archivo Creado en: " << rutaCompleta << std::endl;
+    } else {
+        std::cerr << "No se pudo abrir el archivo: " << rutaCompleta << std::endl;
     }
 
-    archivoResultados.close();
     return estadoCreacion;
 }
 
-bool GestorCsv::crearArchivoBuscados(string &ruta, list<ProgramaAcademico *> &programasBuscados, vector<string> etiquetasColumnas) const
-{
-    // Este bool nos ayudará a saber si se creo exitosamente el archivo
-    bool estadoCreacion = false;
-    string rutaCompleta = ruta + "buscados.csv";
-    ofstream archivoBuscados(rutaCompleta);
-    if (archivoBuscados.is_open())
-    {
-
-        // Imprimimos en el archivo las etiquetas (Primera fila)
-        for (int i = 0; i < etiquetasColumnas.size(); i++)
-        {
-            archivoBuscados << etiquetasColumnas[i] << ";";
-        }
-        archivoBuscados << "GRADUADOS;INSCRITOS;MATRICULADOS;NEOS" << endl;
-
-        list<ProgramaAcademico *>::iterator it;
-        // Leemos todos los programas de la lista de los programas buscados para imprimirlos
-        for (it = programasBuscados.begin(); it != programasBuscados.end(); it++)
-        {
-            // Imprimimos los 8 consolidados del programa
-            for (int i = 0; i < 8; i++)
-            {
-                // Imprimimos la informacion base del programa
-                archivoBuscados << (*it)->getCodigoDeLaInstitucion() << ";";
-                archivoBuscados << (*it)->getIesPadre() << ";";
-                archivoBuscados << (*it)->getInstitucionDeEducacionSuperiorIes() << ";";
-                archivoBuscados << (*it)->getPrincipalOSeccional() << ";";
-                archivoBuscados << (*it)->getIdSectorIes() << ";";
-                archivoBuscados << (*it)->getSectorIes() << ";";
-                archivoBuscados << (*it)->getIdCaracter() << ";";
-                archivoBuscados << (*it)->getCaracterIes() << ";";
-                archivoBuscados << (*it)->getCodigoDelDepartamentoIes() << ";";
-                archivoBuscados << (*it)->getDepartamentoDeDomicilioDeLaIes() << ";";
-                archivoBuscados << (*it)->getCodigoDelMunicipioIes() << ";";
-                archivoBuscados << (*it)->getMunicipioDeDomicilioDeLaIes() << ";";
-                archivoBuscados << (*it)->getCodigoSniesDelPrograma() << ";";
-                archivoBuscados << (*it)->getProgramaAcademico() << ";";
-                archivoBuscados << (*it)->getIdNivelAcademico() << ";";
-                archivoBuscados << (*it)->getNivelAcademico() << ";";
-                archivoBuscados << (*it)->getIdNivelDeFormacion() << ";";
-                archivoBuscados << (*it)->getNivelDeFormacion() << ";";
-                archivoBuscados << (*it)->getIdMetodologia() << ";";
-                archivoBuscados << (*it)->getMetodologia() << ";";
-                archivoBuscados << (*it)->getIdArea() << ";";
-                archivoBuscados << (*it)->getAreaDeConocimiento() << ";";
-                archivoBuscados << (*it)->getIdNucleo() << ";";
-                archivoBuscados << (*it)->getNucleoBasicoDelConocimientoNbc() << ";";
-                archivoBuscados << (*it)->getIdCineCampoAmplio() << ";";
-                archivoBuscados << (*it)->getDescCineCampoAmplio() << ";";
-                archivoBuscados << (*it)->getIdCineCampoEspecifico() << ";";
-                archivoBuscados << (*it)->getDescCineCampoEspecifico() << ";";
-                archivoBuscados << (*it)->getIdCineCodigoDetallado() << ";";
-                archivoBuscados << (*it)->getDescCineCodigoDetallado() << ";";
-                archivoBuscados << (*it)->getCodigoDelDepartamentoPrograma() << ";";
-                archivoBuscados << (*it)->getDepartamentoDeOfertaDelPrograma() << ";";
-                archivoBuscados << (*it)->getCodigoDelMunicipioPrograma() << ";";
-                archivoBuscados << (*it)->getMunicipioDeOfertaDelPrograma() << ";";
-
-                // Imprimimos la información del consolidado: (ID SEXO;SEXO;AÑO;SEMESTRE;ADMITIDOS;GRADUADOS;INSCRITOS;MATRICULADOS;NEOS)
-                Consolidado *consolidadoActual = (*it)->getConsolidado(i);
-                archivoBuscados << consolidadoActual->getIdSexo() << ";";
-                archivoBuscados << consolidadoActual->getSexo() << ";";
-                archivoBuscados << consolidadoActual->getAno() << ";";
-                archivoBuscados << consolidadoActual->getSemestre() << ";";
-                archivoBuscados << consolidadoActual->getAdmitidos() << ";";
-                archivoBuscados << consolidadoActual->getGraduados() << ";";
-                archivoBuscados << consolidadoActual->getInscritos() << ";";
-                archivoBuscados << consolidadoActual->getMatriculados() << ";";
-                archivoBuscados << consolidadoActual->getMatriculadosPrimerSemestre();
-                // Saltamos de linea para la siguiente fila
-                archivoBuscados << endl;
-            }
-        }
-
-        // Cambiamos el valor del booleano si logramos llegar hasta este punto
-        estadoCreacion = true;
-        // Imprimimos ruta donde quedo el archivo
-        cout << "Archivo Creado en: " << rutaCompleta << endl;
-    }
-
-    archivoBuscados.close();
-    return estadoCreacion;
-}
-
-bool GestorCsv::crearArchivoExtra(string &ruta, const vector<vector<string>> &datosAImprimir) const
-{
-    string rutaCompleta = ruta + "extras.csv";
-    ofstream archivoExtra(rutaCompleta);
-
-    if (!archivoExtra.is_open())
-    {
-        cout << "No se pudo abrir el archivo: " << rutaCompleta << endl;
-        return false;
-    }
-
-    // Imprimir las filas en el archivo
-    for (const auto &fila : datosAImprimir)
-    {
-        imprimirFila(archivoExtra, fila);
-    }
-
-    cout << "Archivo Creado en: " << rutaCompleta << endl;
-    archivoExtra.close();
-    return true;
-}
-
-// Nueva función para imprimir una fila
-void GestorCsv::imprimirFila(ofstream &archivo, const vector<string> &fila) const
+// Función para imprimir una fila
+void GestorCsv::imprimirFila(std::ofstream &archivo, const std::vector<std::string> &fila) const
 {
     for (size_t i = 0; i < fila.size(); ++i)
     {
@@ -401,5 +222,27 @@ void GestorCsv::imprimirFila(ofstream &archivo, const vector<string> &fila) cons
             archivo << ";";
         }
     }
-    archivo << endl;
+    archivo << std::endl;
+}
+
+bool GestorCsv::crearArchivoExtra(const std::string &ruta, const std::vector<std::vector<std::string>> &datosAImprimir) const
+{
+    std::string rutaCompleta = ruta + "extras.csv";
+    std::ofstream archivoExtra(rutaCompleta);
+
+    if (!archivoExtra.is_open())
+    {
+        std::cerr << "No se pudo abrir el archivo: " << rutaCompleta << std::endl;
+        return false;
+    }
+
+    // Imprimir las filas en el archivo
+    for (const auto &fila : datosAImprimir)
+    {
+        imprimirFila(archivoExtra, fila);
+    }
+
+    std::cout << "Archivo Creado en: " << rutaCompleta << std::endl;
+    archivoExtra.close();
+    return true;
 }

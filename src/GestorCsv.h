@@ -11,29 +11,26 @@
 #include "ProgramaAcademico.h"
 #include "Consolidado.h"
 
-// Recomendación Linter: Se debe evitar el uso de using namespace en archivos de cabecera
-using namespace std;
-
 class GestorCsv
 {
 public:
     GestorCsv() = default;
-    vector<int> leerProgramasCsv(string &ruta)const;
-    vector<vector<string>> leerArchivoPrimera(string &rutaBase, string &ano, vector<int> &codigosSnies) const;
-    vector<vector<string>> leerArchivoSegunda(const string &rutaBase, const string &ano, const vector<int> &codigosSnies) const;
-    vector<vector<string>> leerArchivo(string &rutaBase, string &ano, vector<int> &codigosSnies, int colmunaCodigoSnies) const;
-    bool crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas) const;
-    bool crearArchivoBuscados(string &ruta, list<ProgramaAcademico *> &programasBuscados, vector<string> etiquetasColumnas) const;
-    bool crearArchivoExtra(string &ruta, const vector<vector<string>> &datosAImprimir) const;
-    void agregarFilasAdicionales(ifstream &archivo, vector<vector<string>> &matrizResultado, int numFilas, int numColumnas) const;
+    std::vector<int> leerProgramasCsv(const std::string &ruta) const;
+    std::vector<std::vector<std::string>> leerArchivoComun(const std::string &rutaBase, const std::string &ano, const std::vector<int> &codigosSnies, int numColumnas, int filasAdicionales) const;
+    std::vector<std::vector<std::string>> leerArchivoPrimera(const std::string &rutaBase, const std::string &ano, const std::vector<int> &codigosSnies) const;
+    std::vector<std::vector<std::string>> leerArchivoSegunda(const std::string &rutaBase, const std::string &ano, const std::vector<int> &codigosSnies) const;
+    std::vector<std::vector<std::string>> leerArchivo(std::string &rutaBase, std::string &ano, std::vector<int> &codigosSnies, int colmunaCodigoSnies) const;
+    bool crearArchivo(const std::string &ruta, const std::map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, const std::vector<std::string> &etiquetasColumnas) const;
+    bool crearArchivoBuscados(const std::string &ruta, std::list<ProgramaAcademico *> &programasBuscados, std::vector<std::string> etiquetasColumnas) const;
+    bool crearArchivoExtra(const std::string &ruta, const std::vector<std::vector<std::string>> &datosAImprimir) const;
+    void agregarFilasAdicionales(std::ifstream &archivo, std::vector<std::vector<std::string>> &matrizResultado, int numFilas, int numColumnas) const;
 
 private:
-    // Declaración de las funciones auxiliares
-    vector<string> leerFila(ifstream &archivo, int numColumnas) const;
-    bool verificarPrograma(const vector<string> &vectorFila, const vector<int> &codigosSnies) const;
-    bool verificarPrograma(const vector<string> &vectorFila, const vector<int> &codigosSnies, int columnaCodigoSnies) const;
-    void leerFilasRestantes(ifstream &archivo, vector<vector<string>> &matrizResultado, int numFilas) const;
-    void imprimirFila(ofstream &archivo, const vector<string> &fila) const; // Nueva declaración
+    std::vector<std::string> leerFila(std::ifstream &archivo, int numColumnas) const;
+    bool verificarPrograma(const std::vector<std::string> &vectorFila, const std::vector<int> &codigosSnies) const;
+    bool verificarPrograma(const std::vector<std::string> &vectorFila, const std::vector<int> &codigosSnies, int columnaCodigoSnies) const;
+    void leerFilasRestantes(std::ifstream &archivo, std::vector<std::vector<std::string>> &matrizResultado, int numFilas) const;
+    void imprimirFila(std::ofstream &archivo, const std::vector<std::string> &fila) const;
 };
 
 #endif // GESTOR_CSV_H
