@@ -3,14 +3,17 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 #include "Consolidado.h"
 
+using std::cin;
+using std::cout;
+using std::endl;
 using std::string;
 using std::vector;
 
 class ProgramaAcademico
 {
-    // Atributos privados
     int codigoDeLaInstitucion;
     int iesPadre;
     string institucionDeEducacionSuperiorIes;
@@ -51,104 +54,94 @@ public:
     ProgramaAcademico();
 
     void setCodigoDeLaInstitucion(int);
-    int getCodigoDeLaInstitucion() const;
+    int getCodigoDeLaInstitucion();
 
     void setIesPadre(int);
-    int getIesPadre() const;
+    int getIesPadre();
 
     void setInstitucionDeEducacionSuperiorIes(string &);
-    string getInstitucionDeEducacionSuperiorIes() const;
+    string getInstitucionDeEducacionSuperiorIes();
 
     void setPrincipalOSeccional(string &);
-    string getPrincipalOSeccional() const;
+    string getPrincipalOSeccional();
 
     void setIdSectorIes(int);
-    int getIdSectorIes() const;
+    int getIdSectorIes();
 
     void setSectorIes(string &);
-    string getSectorIes() const;
+    string getSectorIes();
 
     void setIdCaracter(int);
-    int getIdCaracter() const;
+    int getIdCaracter();
 
     void setCaracterIes(string &);
-    string getCaracterIes() const;
+    string getCaracterIes();
 
     void setCodigoDelDepartamentoIes(int);
-    int getCodigoDelDepartamentoIes() const;
+    int getCodigoDelDepartamentoIes();
 
     void setDepartamentoDeDomicilioDeLaIes(string &);
-    string getDepartamentoDeDomicilioDeLaIes() const;
+    string getDepartamentoDeDomicilioDeLaIes();
 
     void setCodigoDelMunicipioIes(int);
-    int getCodigoDelMunicipioIes() const;
+    int getCodigoDelMunicipioIes();
 
     void setMunicipioDeDomicilioDeLaIes(string &);
-    string getMunicipioDeDomicilioDeLaIes() const;
+    string getMunicipioDeDomicilioDeLaIes();
 
     void setCodigoSniesDelPrograma(int);
-    int getCodigoSniesDelPrograma() const;
+    int getCodigoSniesDelPrograma();
 
     void setProgramaAcademico(string &);
-    string getProgramaAcademico() const;
+    string getProgramaAcademico();
 
     void setIdNivelAcademico(int);
-    int getIdNivelAcademico() const;
+    int getIdNivelAcademico();
 
     void setNivelAcademico(string &);
-    string getNivelAcademico() const;
+    string getNivelAcademico();
 
     void setIdNivelDeFormacion(int);
-    int getIdNivelDeFormacion() const;
+    int getIdNivelDeFormacion();
 
     void setNivelDeFormacion(string &);
-    string getNivelDeFormacion() const;
+    string getNivelDeFormacion();
 
     void setIdMetodologia(int);
-    int getIdMetodologia() const;
+    int getIdMetodologia();
     void setMetodologia(string &);
-    string getMetodologia() const;
+    string getMetodologia();
 
     void setIdArea(int);
-    int getIdArea() const;
+    int getIdArea();
     void setAreaDeConocimiento(string &);
-    string getAreaDeConocimiento() const;
-
+    string getAreaDeConocimiento();
     void setIdNucleo(int);
-    int getIdNucleo() const;
+    int getIdNucleo();
     void setNucleoBasicoDelConocimientoNbc(string &);
-    string getNucleoBasicoDelConocimientoNbc() const;
-
+    string getNucleoBasicoDelConocimientoNbc();
     void setIdCineCampoAmplio(int);
-    int getIdCineCampoAmplio() const;
+    int getIdCineCampoAmplio();
     void setDescCineCampoAmplio(string &);
-    string getDescCineCampoAmplio() const;
-
+    string getDescCineCampoAmplio();
     void setIdCineCampoEspecifico(int);
-    int getIdCineCampoEspecifico() const;
+    int getIdCineCampoEspecifico();
     void setDescCineCampoEspecifico(string &);
-    string getDescCineCampoEspecifico() const;
-
+    string getDescCineCampoEspecifico();
     void setIdCineCodigoDetallado(int);
-    int getIdCineCodigoDetallado() const;
+    int getIdCineCodigoDetallado();
     void setDescCineCodigoDetallado(string &);
-    string getDescCineCodigoDetallado() const;
-
+    string getDescCineCodigoDetallado();
     void setCodigoDelDepartamentoPrograma(int);
-    int getCodigoDelDepartamentoPrograma() const;
-
+    int getCodigoDelDepartamentoPrograma();
     void setDepartamentoDeOfertaDelPrograma(string &);
-    string getDepartamentoDeOfertaDelPrograma() const;
-
+    string getDepartamentoDeOfertaDelPrograma();
     void setCodigoDelMunicipioPrograma(int);
-    int getCodigoDelMunicipioPrograma() const;
-
+    int getCodigoDelMunicipioPrograma();
     void setMunicipioDeOfertaDelPrograma(string &);
-    string getMunicipioDeOfertaDelPrograma() const;
-
+    string getMunicipioDeOfertaDelPrograma();
     void setConsolidado(Consolidado *, int);
-    Consolidado *getConsolidado(int) const;
-
+    Consolidado *getConsolidado(int);
     ~ProgramaAcademico();
 };
 

@@ -1,99 +1,95 @@
 #include "Consolidado.h"
-#include <string_view>
 
 Consolidado::Consolidado() = default;
 
-Consolidado::Consolidado(int idSexo, std::string_view sexo, int ano, int semestre, const DatosEstudiantes &datos)
-    : idSexo(idSexo), sexo(sexo), ano(ano), semestre(semestre),
-      inscritos(datos.inscritos), admitidos(datos.admitidos),
-      matriculados(datos.primeraMatricula), matriculadosPrimerSemestre(datos.totalMatriculados), graduados(datos.graduados) {}
+Consolidado::Consolidado(int idSexo, string sexo, int ano, int semestre, int inscritos, int admitidos, int primeraMatricula, int totalMatriculados, int graduados)
+    : idSexo(idSexo), sexo(sexo), ano(ano), semestre(semestre), inscritos(inscritos), admitidos(admitidos), matriculados(primeraMatricula), matriculadosPrimerSemestre(totalMatriculados), graduados(graduados) {}
 
-int Consolidado::getIdSexo() const
+int Consolidado::getIdSexo()
 {
     return idSexo;
 }
 
-void Consolidado::setIdSexo(int nuevoIdSexo)
+void Consolidado::setIdSexo(int idSexo)
 {
-    this->idSexo = nuevoIdSexo;
+    this->idSexo = idSexo;
 }
 
-std::string Consolidado::getSexo() const
+string Consolidado::getSexo()
 {
-    return std::string(sexo);
+    return sexo;
 }
 
-void Consolidado::setSexo(std::string_view nuevoSexo)
+void Consolidado::setSexo(string &sexo)
 {
-    this->sexo = nuevoSexo;
+    this->sexo = sexo;
 }
 
-int Consolidado::getAno() const
+int Consolidado::getAno()
 {
     return ano;
 }
 
-void Consolidado::setAno(int nuevoAno)
+void Consolidado::setAno(int ano)
 {
-    this->ano = nuevoAno;
+    this->ano = ano;
 }
 
-int Consolidado::getSemestre() const
+int Consolidado::getSemestre()
 {
     return semestre;
 }
-
-void Consolidado::setSemestre(int nuevoSemestre)
+void Consolidado::setSemestre(int semestre)
 {
-    this->semestre = nuevoSemestre;
+    this->semestre = semestre;
 }
 
-int Consolidado::getInscritos() const
+int Consolidado::getInscritos()
 {
     return inscritos;
 }
 
-void Consolidado::setInscritos(int nuevosInscritos)
+void Consolidado::setInscritos(int inscritos)
 {
-    this->inscritos = nuevosInscritos;
+    this->inscritos = inscritos;
 }
 
-int Consolidado::getAdmitidos() const
+int Consolidado::getAdmitidos()
 {
     return admitidos;
 }
 
-void Consolidado::setAdmitidos(int nuevosAdmitidos)
+void Consolidado::setAdmitidos(int admitidos)
 {
-    this->admitidos = nuevosAdmitidos;
+    this->admitidos = admitidos;
 }
 
-int Consolidado::getMatriculados() const
+int Consolidado::getMatriculados()
 {
     return matriculados;
 }
 
-void Consolidado::setMatriculados(int nuevosMatriculados)
+void Consolidado::setMatriculados(int matriculados)
 {
-    this->matriculados = nuevosMatriculados;
+    this->matriculados = matriculados;
 }
 
-int Consolidado::getMatriculadosPrimerSemestre() const
+int Consolidado::getMatriculadosPrimerSemestre()
 {
     return matriculadosPrimerSemestre;
 }
 
-void Consolidado::setMatriculadosPrimerSemestre(int nuevosMatriculadosPrimerSemestre)
+void Consolidado::setMatriculadosPrimerSemestre(int matriculadosPrimerSemestre)
 {
-    this->matriculadosPrimerSemestre = nuevosMatriculadosPrimerSemestre;
+    this->matriculadosPrimerSemestre = matriculadosPrimerSemestre;
 }
 
-int Consolidado::getGraduados() const
+int Consolidado::getGraduados()
 {
     return graduados;
 }
 
-void Consolidado::setGraduados(int nuevosGraduados)
+void Consolidado::setGraduados(int graduados)
 {
-    this->graduados = nuevosGraduados;
+    this->graduados = graduados;
 }

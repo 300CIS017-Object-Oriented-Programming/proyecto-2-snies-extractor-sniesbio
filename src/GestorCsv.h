@@ -5,11 +5,15 @@
 #include <vector>
 #include <map>
 #include <fstream>
+// Mantenimiento: Se incluyen librerías que no se utilizan
 #include <sstream>
 #include <list>
 #include <algorithm>
 #include "ProgramaAcademico.h"
 #include "Consolidado.h"
+
+// Recomendación Linter: Se debe evitar el uso de using namespace en archivos de cabecera
+using namespace std;
 
 class GestorCsv
 {
@@ -33,4 +37,4 @@ private:
     void imprimirFila(std::ofstream &archivo, const std::vector<std::string> &fila) const;
 };
 
-#endif // GESTOR_CSV_H
+#endif
