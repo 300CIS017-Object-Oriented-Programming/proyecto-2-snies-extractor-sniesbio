@@ -3,12 +3,9 @@
 
 #include <string>
 #include <vector>
-#include <iostream>
+#include <memory>  // Para std::unique_ptr
 #include "Consolidado.h"
 
-using std::cin;
-using std::cout;
-using std::endl;
 using std::string;
 using std::vector;
 
@@ -48,101 +45,116 @@ class ProgramaAcademico
     string departamentoDeOfertaDelPrograma;
     int codigoDelMunicipioPrograma;
     string municipioDeOfertaDelPrograma;
-    vector<Consolidado *> consolidados;
+    vector<std::unique_ptr<Consolidado>> consolidados;  // Manejo de memoria automática con unique_ptr
 
 public:
     ProgramaAcademico();
 
-    void setCodigoDeLaInstitucion(int);
-    int getCodigoDeLaInstitucion();
+    // Métodos set y get
+    void setCodigoDeLaInstitucion(int nuevoCodigoDeLaInstitucion);
+    int getCodigoDeLaInstitucion() const;
 
-    void setIesPadre(int);
-    int getIesPadre();
+    void setIesPadre(int nuevoIesPadre);
+    int getIesPadre() const;
 
-    void setInstitucionDeEducacionSuperiorIes(string &);
-    string getInstitucionDeEducacionSuperiorIes();
+    void setInstitucionDeEducacionSuperiorIes(std::string_view nuevoInstitucionDeEducacionSuperiorIes);
+    string getInstitucionDeEducacionSuperiorIes() const;
 
-    void setPrincipalOSeccional(string &);
-    string getPrincipalOSeccional();
+    void setPrincipalOSeccional(std::string_view nuevoPrincipalOSeccional);
+    string getPrincipalOSeccional() const;
 
-    void setIdSectorIes(int);
-    int getIdSectorIes();
+    void setIdSectorIes(int nuevoIdSectorIes);
+    int getIdSectorIes() const;
 
-    void setSectorIes(string &);
-    string getSectorIes();
+    void setSectorIes(std::string_view nuevoSectorIes);
+    string getSectorIes() const;
 
-    void setIdCaracter(int);
-    int getIdCaracter();
+    void setIdCaracter(int nuevoIdCaracter);
+    int getIdCaracter() const;
 
-    void setCaracterIes(string &);
-    string getCaracterIes();
+    void setCaracterIes(std::string_view nuevoCaracterIes);
+    string getCaracterIes() const;
 
-    void setCodigoDelDepartamentoIes(int);
-    int getCodigoDelDepartamentoIes();
+    void setCodigoDelDepartamentoIes(int nuevoCodigoDelDepartamentoIes);
+    int getCodigoDelDepartamentoIes() const;
 
-    void setDepartamentoDeDomicilioDeLaIes(string &);
-    string getDepartamentoDeDomicilioDeLaIes();
+    void setDepartamentoDeDomicilioDeLaIes(std::string_view nuevoDepartamentoDeDomicilioDeLaIes);
+    string getDepartamentoDeDomicilioDeLaIes() const;
 
-    void setCodigoDelMunicipioIes(int);
-    int getCodigoDelMunicipioIes();
+    void setCodigoDelMunicipioIes(int nuevoCodigoDelMunicipioIes);
+    int getCodigoDelMunicipioIes() const;
 
-    void setMunicipioDeDomicilioDeLaIes(string &);
-    string getMunicipioDeDomicilioDeLaIes();
+    void setMunicipioDeDomicilioDeLaIes(std::string_view nuevoMunicipioDeDomicilioDeLaIes);
+    string getMunicipioDeDomicilioDeLaIes() const;
 
-    void setCodigoSniesDelPrograma(int);
-    int getCodigoSniesDelPrograma();
+    void setCodigoSniesDelPrograma(int nuevoCodigoSniesDelPrograma);
+    int getCodigoSniesDelPrograma() const;
 
-    void setProgramaAcademico(string &);
-    string getProgramaAcademico();
+    void setProgramaAcademico(std::string_view nuevoProgramaAcademico);
+    string getProgramaAcademico() const;
 
-    void setIdNivelAcademico(int);
-    int getIdNivelAcademico();
+    void setIdNivelAcademico(int nuevoIdNivelAcademico);
+    int getIdNivelAcademico() const;
 
-    void setNivelAcademico(string &);
-    string getNivelAcademico();
+    void setNivelAcademico(std::string_view nuevoNivelAcademico);
+    string getNivelAcademico() const;
 
-    void setIdNivelDeFormacion(int);
-    int getIdNivelDeFormacion();
+    void setIdNivelDeFormacion(int nuevoIdNivelDeFormacion);
+    int getIdNivelDeFormacion() const;
 
-    void setNivelDeFormacion(string &);
-    string getNivelDeFormacion();
+    void setNivelDeFormacion(std::string_view nuevoNivelDeFormacion);
+    string getNivelDeFormacion() const;
 
-    void setIdMetodologia(int);
-    int getIdMetodologia();
-    void setMetodologia(string &);
-    string getMetodologia();
+    void setIdMetodologia(int nuevoIdMetodologia);
+    int getIdMetodologia() const;
 
-    void setIdArea(int);
-    int getIdArea();
-    void setAreaDeConocimiento(string &);
-    string getAreaDeConocimiento();
-    void setIdNucleo(int);
-    int getIdNucleo();
-    void setNucleoBasicoDelConocimientoNbc(string &);
-    string getNucleoBasicoDelConocimientoNbc();
-    void setIdCineCampoAmplio(int);
-    int getIdCineCampoAmplio();
-    void setDescCineCampoAmplio(string &);
-    string getDescCineCampoAmplio();
-    void setIdCineCampoEspecifico(int);
-    int getIdCineCampoEspecifico();
-    void setDescCineCampoEspecifico(string &);
-    string getDescCineCampoEspecifico();
-    void setIdCineCodigoDetallado(int);
-    int getIdCineCodigoDetallado();
-    void setDescCineCodigoDetallado(string &);
-    string getDescCineCodigoDetallado();
-    void setCodigoDelDepartamentoPrograma(int);
-    int getCodigoDelDepartamentoPrograma();
-    void setDepartamentoDeOfertaDelPrograma(string &);
-    string getDepartamentoDeOfertaDelPrograma();
-    void setCodigoDelMunicipioPrograma(int);
-    int getCodigoDelMunicipioPrograma();
-    void setMunicipioDeOfertaDelPrograma(string &);
-    string getMunicipioDeOfertaDelPrograma();
-    void setConsolidado(Consolidado *, int);
-    Consolidado *getConsolidado(int);
-    ~ProgramaAcademico();
+    void setMetodologia(std::string_view nuevaMetodologia);
+    string getMetodologia() const;
+
+    void setIdArea(int nuevoIdArea);
+    int getIdArea() const;
+
+    void setAreaDeConocimiento(std::string_view areaConocimiento);
+    string getAreaDeConocimiento() const;
+
+    void setIdNucleo(int nuevoIdNucleo);
+    int getIdNucleo() const;
+
+    void setNucleoBasicoDelConocimientoNbc(std::string_view nuevoNucleoBasicoDelConocimientoNbc);
+    string getNucleoBasicoDelConocimientoNbc() const;
+
+    void setIdCineCampoAmplio(int nuevoIdCineCampoAmplio);
+    int getIdCineCampoAmplio() const;
+
+    void setDescCineCampoAmplio(std::string_view nuevoDescCineCampoAmplio);
+    string getDescCineCampoAmplio() const;
+
+    void setIdCineCampoEspecifico(int nuevoIdCineCampoEspecifico);
+    int getIdCineCampoEspecifico() const;
+
+    void setDescCineCampoEspecifico(std::string_view nuevoDescCineCampoEspecifico);
+    string getDescCineCampoEspecifico() const;
+
+    void setIdCineCodigoDetallado(int nuevoIdCineCodigoDetallado);
+    int getIdCineCodigoDetallado() const;
+
+    void setDescCineCodigoDetallado(std::string_view nuevoDescCineCodigoDetallado);
+    string getDescCineCodigoDetallado() const;
+
+    void setCodigoDelDepartamentoPrograma(int nuevoCodigoDelDepartamentoPrograma);
+    int getCodigoDelDepartamentoPrograma() const;
+
+    void setDepartamentoDeOfertaDelPrograma(std::string_view nuevoDepartamentoDeOfertaDelPrograma);
+    string getDepartamentoDeOfertaDelPrograma() const;
+
+    void setCodigoDelMunicipioPrograma(int nuevoCodigoDelMunicipioPrograma);
+    int getCodigoDelMunicipioPrograma() const;
+
+    void setMunicipioDeOfertaDelPrograma(std::string_view nuevoMunicipioDeOfertaDelPrograma);
+    string getMunicipioDeOfertaDelPrograma() const;
+
+    void setConsolidado(std::unique_ptr<Consolidado> nuevoConsolidado, int pos);
+    const Consolidado* getConsolidado(int posicionConsolidado) const;
 };
 
 #endif
