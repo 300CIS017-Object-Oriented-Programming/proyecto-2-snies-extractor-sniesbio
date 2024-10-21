@@ -246,3 +246,82 @@ bool GestorCsv::crearArchivoExtra(const std::string &ruta, const std::vector<std
     archivoExtra.close();
     return true;
 }
+
+void GestorCsv::leerFilasRestantes(std::ifstream &archivo, std::vector<std::vector<std::string>> &matrizResultado, int numFilas) const
+{
+    for (int i = 0; i < numFilas; ++i)
+    {
+        std::vector<std::string> fila = leerFila(archivo, 13);
+        if (!fila.empty())
+        {
+            matrizResultado.push_back(fila);
+        }
+    }
+}
+
+std::vector<std::vector<std::string>> GestorCsv::leerArchivo(const std::string &rutaBase, const std::string &ano, const std::vector<int> &codigosSnies, int columnaCodigoSnies) const
+{
+    std::vector<std::vector<std::string>> matrizResultado;
+    std::string rutaCompleta = rutaBase + ano + ".csv";
+    std::ifstream archivo(rutaCompleta);
+
+    if (!archivo.is_open())
+    {
+        std::cerr << "Archivo " << rutaCompleta << " no se pudo abrir correctamente" << std::endl;
+        return matrizResultado;
+    }
+
+    matrizResultado.push_back(leerFila(archivo, 39));
+
+    while (archivo)
+    {
+        std::vector<std::string> vectorFila = leerFila(archivo, 13);
+
+        if (verificarPrograma(vectorFila, codigosSnies, columnaCodigoSnies))
+        {
+            matrizResultado.push_back(vectorFila);
+            leerFilasRestantes(archivo, matrizResultado, 3);
+        }
+    }
+
+    archivo.close();
+    return matrizResultado;
+}
+
+bool GestorCsv::crearArchivoBuscados(const std::string &ruta, const std::list<ProgramaAcademico *> &programasBuscados, const std::vector<std::string> &etiquetasColumnas) const
+{
+    std::ofstream archivo(ruta);
+    if (!archivo.is_open())
+    {
+        std::cerr << "No se pudo abrir el archivo: " << ruta << std::endl;
+        return false;
+    }
+
+    for (const auto &etiqueta : etiquetasColumnas)
+    {
+        archivo << etiqueta << ";";
+    }
+    archivo << std::endl;
+
+    for (const auto *programa : programasBuscados)
+    {
+        archivo << programa->getCodigoSniesDelPrograma() << ";";
+        archivo << programa->getProgramaAcademico() << ";";
+        archivo << std::endl;
+    }
+
+    archivo.close();
+    return true;
+}
+
+bool GestorCsv::verificarPrograma(const std::vector<std::string> &vectorFila, const std::vector<int> &codigosSnies, int columnaCodigoSnies) const
+{
+    // Verificar que la columna del código SNIES no esté vacía y tenga un código válido
+    if (!vectorFila[columnaCodigoSnies].empty())
+    {
+        // Convertir el código SNIES de la columna especificada a entero y verificar si está en la lista de códigos permitidos
+        int codigoSnies = std::stoi(vectorFila[columnaCodigoSnies]);
+        return std::find(codigosSnies.begin(), codigosSnies.end(), codigoSnies) != codigosSnies.end();
+    }
+    return false;
+}
