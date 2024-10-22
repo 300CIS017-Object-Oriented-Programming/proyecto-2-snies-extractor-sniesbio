@@ -83,7 +83,7 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
             consolidado[m]->setAno(stoi(programasAcademicosVector[i + m][36]));
             consolidado[m]->setSemestre(stoi(programasAcademicosVector[i + m][37]));
             consolidado[m]->setAdmitidos(stoi(programasAcademicosVector[i + m][38]));
-            programaAcademico->setConsolidado(consolidado[m], m);
+            programaAcademico->setConsolidado(std::make_unique<Consolidado>(*(consolidado[m])), m);
         }
         programasAcademicos.emplace(programaAcademico->getCodigoSniesDelPrograma(), programaAcademico);
     }
@@ -106,7 +106,7 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
                 consolidado[m]->setAno(stoi(programasAcademicosVector[j + m][3]));
                 consolidado[m]->setSemestre(stoi(programasAcademicosVector[j + m][4]));
                 consolidado[m]->setAdmitidos(stoi(programasAcademicosVector[j + m][5]));
-                programa->setConsolidado(consolidado[m], m + 4);
+                programa->setConsolidado(std::make_unique<Consolidado>(*(consolidado[m])), m + 4);
             }
         }
     }
