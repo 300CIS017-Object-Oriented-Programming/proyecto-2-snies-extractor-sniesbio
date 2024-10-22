@@ -14,7 +14,6 @@ using namespace std;
 
 class SNIESController
 {
-
 private:
     map<int, ProgramaAcademico *> programasAcademicos;
     GestorCsv gestorCsvObj;
@@ -29,11 +28,11 @@ private:
 
 public:
     SNIESController() = default;
-    SNIESController(string &, string &, string &, string &, string &, string &, string &);
+    SNIESController(const string &, const string &, const string &, const string &, const string &, const string &, const string &);  // Modificar para recibir referencias constantes
     ~SNIESController();
-    void procesarDatosCsv(string &, string &);
+    void procesarDatosCsv(const string &, const string &);  // Modificar para recibir referencias constantes
     void calcularDatosExtra(bool);
-    void buscarProgramas(bool, string &, int);
+    void buscarProgramas(bool, const string &, int);  // Modificar para recibir referencias constantes
 };
 
 #endif
