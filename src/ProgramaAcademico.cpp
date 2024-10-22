@@ -1,18 +1,15 @@
 #include "ProgramaAcademico.h"
+#include <iostream>
 
-using namespace std;
+ProgramaAcademico::ProgramaAcademico() : consolidados(8) {}
 
-ProgramaAcademico::ProgramaAcademico()
-{
-    consolidados = vector<Consolidado *>(8);
-}
-
+// Setters y Getters refactorizados con std::string_view en setters
 void ProgramaAcademico::setCodigoDeLaInstitucion(int nuevoCodigoDeLaInstitucion)
 {
     codigoDeLaInstitucion = nuevoCodigoDeLaInstitucion;
 }
 
-int ProgramaAcademico::getCodigoDeLaInstitucion()
+int ProgramaAcademico::getCodigoDeLaInstitucion() const
 {
     return codigoDeLaInstitucion;
 }
@@ -22,26 +19,27 @@ void ProgramaAcademico::setIesPadre(int nuevoIesPadre)
     iesPadre = nuevoIesPadre;
 }
 
-int ProgramaAcademico::getIesPadre()
+int ProgramaAcademico::getIesPadre() const
 {
     return iesPadre;
 }
 
-void ProgramaAcademico::setInstitucionDeEducacionSuperiorIes(string &nuevoInstitucionDeEducacionSuperiorIes)
+void ProgramaAcademico::setInstitucionDeEducacionSuperiorIes(std::string_view nuevoInstitucionDeEducacionSuperiorIes)
 {
     institucionDeEducacionSuperiorIes = nuevoInstitucionDeEducacionSuperiorIes;
 }
-string ProgramaAcademico::getInstitucionDeEducacionSuperiorIes()
+
+const std::string &ProgramaAcademico::getInstitucionDeEducacionSuperiorIes() const
 {
     return institucionDeEducacionSuperiorIes;
 }
 
-void ProgramaAcademico::setPrincipalOSeccional(string &nuevoPrincipalOSeccional)
+void ProgramaAcademico::setPrincipalOSeccional(std::string_view nuevoPrincipalOSeccional)
 {
     principalOSeccional = nuevoPrincipalOSeccional;
 }
 
-string ProgramaAcademico::getPrincipalOSeccional()
+const std::string &ProgramaAcademico::getPrincipalOSeccional() const
 {
     return principalOSeccional;
 }
@@ -51,17 +49,17 @@ void ProgramaAcademico::setIdSectorIes(int nuevoIdSectorIes)
     idSectorIes = nuevoIdSectorIes;
 }
 
-int ProgramaAcademico::getIdSectorIes()
+int ProgramaAcademico::getIdSectorIes() const
 {
     return idSectorIes;
 }
 
-void ProgramaAcademico::setSectorIes(string &nuevoSectorIes)
+void ProgramaAcademico::setSectorIes(std::string_view nuevoSectorIes)
 {
     sectorIes = nuevoSectorIes;
 }
 
-string ProgramaAcademico::getSectorIes()
+const std::string &ProgramaAcademico::getSectorIes() const
 {
     return sectorIes;
 }
@@ -71,17 +69,17 @@ void ProgramaAcademico::setIdCaracter(int nuevoIdCaracter)
     idCaracter = nuevoIdCaracter;
 }
 
-int ProgramaAcademico::getIdCaracter()
+int ProgramaAcademico::getIdCaracter() const
 {
     return idCaracter;
 }
 
-void ProgramaAcademico::setCaracterIes(string &nuevoCaracterIes)
+void ProgramaAcademico::setCaracterIes(std::string_view nuevoCaracterIes)
 {
     caracterIes = nuevoCaracterIes;
 }
 
-string ProgramaAcademico::getCaracterIes()
+const std::string &ProgramaAcademico::getCaracterIes() const
 {
     return caracterIes;
 }
@@ -91,17 +89,17 @@ void ProgramaAcademico::setCodigoDelDepartamentoIes(int nuevoCodigoDelDepartamen
     codigoDelDepartamentoIes = nuevoCodigoDelDepartamentoIes;
 }
 
-int ProgramaAcademico::getCodigoDelDepartamentoIes()
+int ProgramaAcademico::getCodigoDelDepartamentoIes() const
 {
     return codigoDelDepartamentoIes;
 }
 
-void ProgramaAcademico::setDepartamentoDeDomicilioDeLaIes(string &nuevoDepartamentoDeDomicilioDeLaIes)
+void ProgramaAcademico::setDepartamentoDeDomicilioDeLaIes(std::string_view nuevoDepartamentoDeDomicilioDeLaIes)
 {
     departamentoDeDomicilioDeLaIes = nuevoDepartamentoDeDomicilioDeLaIes;
 }
 
-string ProgramaAcademico::getDepartamentoDeDomicilioDeLaIes()
+const std::string &ProgramaAcademico::getDepartamentoDeDomicilioDeLaIes() const
 {
     return departamentoDeDomicilioDeLaIes;
 }
@@ -111,17 +109,17 @@ void ProgramaAcademico::setCodigoDelMunicipioIes(int nuevoCodigoDelMunicipioIes)
     codigoDelMunicipioIes = nuevoCodigoDelMunicipioIes;
 }
 
-int ProgramaAcademico::getCodigoDelMunicipioIes()
+int ProgramaAcademico::getCodigoDelMunicipioIes() const
 {
     return codigoDelMunicipioIes;
 }
 
-void ProgramaAcademico::setMunicipioDeDomicilioDeLaIes(string &nuevoMunicipioDeDomicilioDeLaIes)
+void ProgramaAcademico::setMunicipioDeDomicilioDeLaIes(std::string_view nuevoMunicipioDeDomicilioDeLaIes)
 {
     municipioDeDomicilioDeLaIes = nuevoMunicipioDeDomicilioDeLaIes;
 }
 
-string ProgramaAcademico::getMunicipioDeDomicilioDeLaIes()
+const std::string &ProgramaAcademico::getMunicipioDeDomicilioDeLaIes() const
 {
     return municipioDeDomicilioDeLaIes;
 }
@@ -131,17 +129,17 @@ void ProgramaAcademico::setCodigoSniesDelPrograma(int nuevoCodigoSniesDelProgram
     codigoSniesDelPrograma = nuevoCodigoSniesDelPrograma;
 }
 
-int ProgramaAcademico::getCodigoSniesDelPrograma()
+int ProgramaAcademico::getCodigoSniesDelPrograma() const
 {
     return codigoSniesDelPrograma;
 }
 
-void ProgramaAcademico::setProgramaAcademico(string &nuevoProgramaAcademico)
+void ProgramaAcademico::setProgramaAcademico(std::string_view nuevoProgramaAcademico)
 {
     programaAcademico = nuevoProgramaAcademico;
 }
 
-string ProgramaAcademico::getProgramaAcademico()
+const std::string &ProgramaAcademico::getProgramaAcademico() const
 {
     return programaAcademico;
 }
@@ -151,17 +149,17 @@ void ProgramaAcademico::setIdNivelAcademico(int nuevoIdNivelAcademico)
     idNivelAcademico = nuevoIdNivelAcademico;
 }
 
-int ProgramaAcademico::getIdNivelAcademico()
+int ProgramaAcademico::getIdNivelAcademico() const
 {
     return idNivelAcademico;
 }
 
-void ProgramaAcademico::setNivelAcademico(string &nuevoNivelAcademico)
+void ProgramaAcademico::setNivelAcademico(std::string_view nuevoNivelAcademico)
 {
     nivelAcademico = nuevoNivelAcademico;
 }
 
-string ProgramaAcademico::getNivelAcademico()
+const std::string &ProgramaAcademico::getNivelAcademico() const
 {
     return nivelAcademico;
 }
@@ -171,17 +169,17 @@ void ProgramaAcademico::setIdNivelDeFormacion(int nuevoIdNivelDeFormacion)
     idNivelDeFormacion = nuevoIdNivelDeFormacion;
 }
 
-int ProgramaAcademico::getIdNivelDeFormacion()
+int ProgramaAcademico::getIdNivelDeFormacion() const
 {
     return idNivelDeFormacion;
 }
 
-void ProgramaAcademico::setNivelDeFormacion(string &nuevoNivelDeFormacion)
+void ProgramaAcademico::setNivelDeFormacion(std::string_view nuevoNivelDeFormacion)
 {
     nivelDeFormacion = nuevoNivelDeFormacion;
 }
 
-string ProgramaAcademico::getNivelDeFormacion()
+const std::string &ProgramaAcademico::getNivelDeFormacion() const
 {
     return nivelDeFormacion;
 }
@@ -191,17 +189,17 @@ void ProgramaAcademico::setIdMetodologia(int nuevoIdMetodologia)
     idMetodologia = nuevoIdMetodologia;
 }
 
-int ProgramaAcademico::getIdMetodologia()
+int ProgramaAcademico::getIdMetodologia() const
 {
     return idMetodologia;
 }
 
-void ProgramaAcademico::setMetodologia(string &nuevaMetodologia)
+void ProgramaAcademico::setMetodologia(std::string_view nuevaMetodologia)
 {
     metodologia = nuevaMetodologia;
 }
 
-string ProgramaAcademico::getMetodologia()
+const std::string &ProgramaAcademico::getMetodologia() const
 {
     return metodologia;
 }
@@ -211,16 +209,17 @@ void ProgramaAcademico::setIdArea(int nuevoIdArea)
     idArea = nuevoIdArea;
 }
 
-int ProgramaAcademico::getIdArea()
+int ProgramaAcademico::getIdArea() const
 {
     return idArea;
 }
 
-void ProgramaAcademico::setAreaDeConocimiento(string &areaConocimiento)
+void ProgramaAcademico::setAreaDeConocimiento(std::string_view areaConocimiento)
 {
     areaDeConocimiento = areaConocimiento;
 }
-string ProgramaAcademico::getAreaDeConocimiento()
+
+const std::string &ProgramaAcademico::getAreaDeConocimiento() const
 {
     return areaDeConocimiento;
 }
@@ -229,16 +228,18 @@ void ProgramaAcademico::setIdNucleo(int nuevoIdNucleo)
 {
     idNucleo = nuevoIdNucleo;
 }
-int ProgramaAcademico::getIdNucleo()
+
+int ProgramaAcademico::getIdNucleo() const
 {
     return idNucleo;
 }
 
-void ProgramaAcademico::setNucleoBasicoDelConocimientoNbc(string &nuevoNucleoBasicoDelConocimientoNbc)
+void ProgramaAcademico::setNucleoBasicoDelConocimientoNbc(std::string_view nuevoNucleoBasicoDelConocimientoNbc)
 {
     nucleoBasicoDelConocimientoNbc = nuevoNucleoBasicoDelConocimientoNbc;
 }
-string ProgramaAcademico::getNucleoBasicoDelConocimientoNbc()
+
+const std::string &ProgramaAcademico::getNucleoBasicoDelConocimientoNbc() const
 {
     return nucleoBasicoDelConocimientoNbc;
 }
@@ -247,16 +248,18 @@ void ProgramaAcademico::setIdCineCampoAmplio(int nuevoIdCineCampoAmplio)
 {
     idCineCampoAmplio = nuevoIdCineCampoAmplio;
 }
-int ProgramaAcademico::getIdCineCampoAmplio()
+
+int ProgramaAcademico::getIdCineCampoAmplio() const
 {
     return idCineCampoAmplio;
 }
 
-void ProgramaAcademico::setDescCineCampoAmplio(string &nuevoDescCineCampoAmplio)
+void ProgramaAcademico::setDescCineCampoAmplio(std::string_view nuevoDescCineCampoAmplio)
 {
     descCineCampoAmplio = nuevoDescCineCampoAmplio;
 }
-string ProgramaAcademico::getDescCineCampoAmplio()
+
+const std::string &ProgramaAcademico::getDescCineCampoAmplio() const
 {
     return descCineCampoAmplio;
 }
@@ -265,17 +268,18 @@ void ProgramaAcademico::setIdCineCampoEspecifico(int nuevoIdCineCampoEspecifico)
 {
     idCineCampoEspecifico = nuevoIdCineCampoEspecifico;
 }
-int ProgramaAcademico::getIdCineCampoEspecifico()
+
+int ProgramaAcademico::getIdCineCampoEspecifico() const
 {
     return idCineCampoEspecifico;
 }
 
-void ProgramaAcademico::setDescCineCampoEspecifico(string &nuevoDescCineCampoEspecifico)
+void ProgramaAcademico::setDescCineCampoEspecifico(std::string_view nuevoDescCineCampoEspecifico)
 {
     descCineCampoEspecifico = nuevoDescCineCampoEspecifico;
 }
 
-string ProgramaAcademico::getDescCineCampoEspecifico()
+const std::string &ProgramaAcademico::getDescCineCampoEspecifico() const
 {
     return descCineCampoEspecifico;
 }
@@ -284,16 +288,18 @@ void ProgramaAcademico::setIdCineCodigoDetallado(int nuevoIdCineCodigoDetallado)
 {
     idCineCodigoDetallado = nuevoIdCineCodigoDetallado;
 }
-int ProgramaAcademico::getIdCineCodigoDetallado()
+
+int ProgramaAcademico::getIdCineCodigoDetallado() const
 {
     return idCineCodigoDetallado;
 }
 
-void ProgramaAcademico::setDescCineCodigoDetallado(string &nuevoDescCineCodigoDetallado)
+void ProgramaAcademico::setDescCineCodigoDetallado(std::string_view nuevoDescCineCodigoDetallado)
 {
     descCineCodigoDetallado = nuevoDescCineCodigoDetallado;
 }
-string ProgramaAcademico::getDescCineCodigoDetallado()
+
+const std::string &ProgramaAcademico::getDescCineCodigoDetallado() const
 {
     return descCineCodigoDetallado;
 }
@@ -302,16 +308,18 @@ void ProgramaAcademico::setCodigoDelDepartamentoPrograma(int nuevoCodigoDelDepar
 {
     codigoDelDepartamentoPrograma = nuevoCodigoDelDepartamentoPrograma;
 }
-int ProgramaAcademico::getCodigoDelDepartamentoPrograma()
+
+int ProgramaAcademico::getCodigoDelDepartamentoPrograma() const
 {
     return codigoDelDepartamentoPrograma;
 }
 
-void ProgramaAcademico::setDepartamentoDeOfertaDelPrograma(string &nuevoDepartamentoDeOfertaDelPrograma)
+void ProgramaAcademico::setDepartamentoDeOfertaDelPrograma(std::string_view nuevoDepartamentoDeOfertaDelPrograma)
 {
     departamentoDeOfertaDelPrograma = nuevoDepartamentoDeOfertaDelPrograma;
 }
-string ProgramaAcademico::getDepartamentoDeOfertaDelPrograma()
+
+const std::string &ProgramaAcademico::getDepartamentoDeOfertaDelPrograma() const
 {
     return departamentoDeOfertaDelPrograma;
 }
@@ -320,34 +328,40 @@ void ProgramaAcademico::setCodigoDelMunicipioPrograma(int nuevoCodigoDelMunicipi
 {
     codigoDelMunicipioPrograma = nuevoCodigoDelMunicipioPrograma;
 }
-int ProgramaAcademico::getCodigoDelMunicipioPrograma()
+
+int ProgramaAcademico::getCodigoDelMunicipioPrograma() const
 {
     return codigoDelMunicipioPrograma;
 }
 
-void ProgramaAcademico::setMunicipioDeOfertaDelPrograma(string &nuevoMunicipioDeOfertaDelPrograma)
+void ProgramaAcademico::setMunicipioDeOfertaDelPrograma(std::string_view nuevoMunicipioDeOfertaDelPrograma)
 {
     municipioDeOfertaDelPrograma = nuevoMunicipioDeOfertaDelPrograma;
 }
-string ProgramaAcademico::getMunicipioDeOfertaDelPrograma()
+
+const std::string &ProgramaAcademico::getMunicipioDeOfertaDelPrograma() const
 {
     return municipioDeOfertaDelPrograma;
 }
 
-void ProgramaAcademico::setConsolidado(Consolidado *nuevoConsolidado, int pos)
+void ProgramaAcademico::setConsolidado(std::unique_ptr<Consolidado> nuevoConsolidado, int pos)
 {
-    consolidados[pos] = nuevoConsolidado;
-}
-
-Consolidado *ProgramaAcademico::getConsolidado(int posicionConsolidado)
-{
-    return consolidados[posicionConsolidado];
-}
-
-ProgramaAcademico::~ProgramaAcademico()
-{
-    for (Consolidado *consolidado : consolidados)
+    if (pos >= 0 && pos < consolidados.size())
     {
-        delete consolidado;
+        consolidados[pos] = std::move(nuevoConsolidado);  // Asignamos con std::move para transferir la propiedad
     }
+    else
+    {
+        std::cerr << "Error: Posición fuera de rango al intentar establecer un consolidado." << std::endl;
+    }
+}
+
+Consolidado *ProgramaAcademico::getConsolidado(int posicionConsolidado) const
+{
+    if (posicionConsolidado >= 0 && posicionConsolidado < consolidados.size())
+    {
+        return consolidados[posicionConsolidado].get();  // Accedemos al puntero gestionado
+    }
+    std::cerr << "Error: Posición fuera de rango al intentar obtener un consolidado." << std::endl;
+    return nullptr;
 }
