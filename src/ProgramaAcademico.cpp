@@ -124,9 +124,14 @@ const std::string &ProgramaAcademico::getMunicipioDeDomicilioDeLaIes() const
     return municipioDeDomicilioDeLaIes;
 }
 
-void ProgramaAcademico::setCodigoSniesDelPrograma(int nuevoCodigoSniesDelPrograma)
-{
-    codigoSniesDelPrograma = nuevoCodigoSniesDelPrograma;
+void ProgramaAcademico::setCodigoSniesDelPrograma(int nuevoCodigoSniesDelPrograma) {
+    try {
+        codigoSniesDelPrograma = nuevoCodigoSniesDelPrograma;
+    } catch (const std::invalid_argument &) {
+        std::cerr << "Error: El código SNIES proporcionado no es válido." << std::endl;
+    } catch (const std::out_of_range &) {
+        std::cerr << "Error: El código SNIES está fuera del rango permitido." << std::endl;
+    }
 }
 
 int ProgramaAcademico::getCodigoSniesDelPrograma() const
@@ -344,24 +349,19 @@ const std::string &ProgramaAcademico::getMunicipioDeOfertaDelPrograma() const
     return municipioDeOfertaDelPrograma;
 }
 
-void ProgramaAcademico::setConsolidado(std::unique_ptr<Consolidado> nuevoConsolidado, int pos)
-{
-    if (pos >= 0 && pos < consolidados.size())
-    {
-        consolidados[pos] = std::move(nuevoConsolidado);  // Asignamos con std::move para transferir la propiedad
-    }
-    else
-    {
+void ProgramaAcademico::setConsolidado(std::unique_ptr<Consolidado> nuevoConsolidado, int pos) {
+    try {
+        consolidados.at(pos) = std::move(nuevoConsolidado);
+    } catch (const std::out_of_range &) {
         std::cerr << "Error: Posición fuera de rango al intentar establecer un consolidado." << std::endl;
     }
 }
 
-Consolidado *ProgramaAcademico::getConsolidado(int posicionConsolidado) const
-{
-    if (posicionConsolidado >= 0 && posicionConsolidado < consolidados.size())
-    {
-        return consolidados[posicionConsolidado].get();  // Accedemos al puntero gestionado
+Consolidado *ProgramaAcademico::getConsolidado(int posicionConsolidado) const {
+    try {
+        return consolidados.at(posicionConsolidado).get();
+    } catch (const std::out_of_range &) {
+        std::cerr << "Error: Posición fuera de rango al intentar obtener un consolidado." << std::endl;
+        return nullptr;
     }
-    std::cerr << "Error: Posición fuera de rango al intentar obtener un consolidado." << std::endl;
-    return nullptr;
 }
