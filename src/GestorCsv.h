@@ -16,12 +16,15 @@ public:
 
     // LeerProgramasCSV : Lee los códigos SNIES de un archivo CSV
     std::vector<int> leerProgramasCsv(const std::string &ruta) const;
+
+    // Métodos para leer archivos CSV
     // LeerArchivoPrimera : Lee el archivo del primer conjunto de datos (admitidos)
     std::vector<std::vector<std::string>> leerArchivoPrimera(const std::string &rutaBase, const std::string &ano, const std::vector<int> &codigosSnies) const;
     // LeerArchivoSegunda : Lee el archivo del segundo conjunto de datos (matriculados)
     std::vector<std::vector<std::string>> leerArchivoSegunda(const std::string &rutaBase, const std::string &ano, const std::vector<int> &codigosSnies) const;
     // LeerArchivoTercera : Lee el archivo del tercer conjunto de datos (graduados)
     std::vector<std::vector<std::string>> leerArchivo(const std::string &rutaBase, const std::string &ano, const std::vector<int> &codigosSnies, int columnaCodigoSnies) const;
+
 
     // CrearArchivo : Crea un archivo CSV con los datos de los programas académicos
     bool crearArchivo(const std::string &ruta, const std::map<int, ProgramaAcademico *> &mapaProgramas, const std::vector<std::string> &etiquetasColumnas) const;

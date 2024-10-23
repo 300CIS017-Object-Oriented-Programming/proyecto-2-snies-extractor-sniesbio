@@ -34,6 +34,7 @@ En este proyecto se utilizarán 5 clases para cumplir el propósito de extraer l
 Más abajo podrán encontrar el diagrama UML de las clases.
 
 
+
 # Diagrama Mermaid
 
 *El vector de Consolidados tendrá siempre 8 posiciones [0-7] donde:*
@@ -49,67 +50,90 @@ Más abajo podrán encontrar el diagrama UML de las clases.
 ###Diagrama actualizado
 ```mermaid
 classDiagram
-    class SNIESController {
-        -map<int, ProgramaAcademico*> programasAcademicos
-        -GestorCsv gestorCsvObj
-        -vector<string> etiquetasColumnas
-        -string rutaProgramasCSV
-        -string rutaAdmitidos
-        -string rutaGraduados
-        -string rutaInscritos
-        -string rutaMatriculados
-        -string rutaMatriculadosPrimerSemestre
-        -string rutaOutput
-        +SNIESController()
-        +SNIESController(string, string, string, string, string, string, string)
-        +~SNIESController()
-        +void procesarDatosCsv(string, string)
-        +vector<int> leerCodigosSnies()
-        +vector<vector<string>> leerDatosPrimera(string_view, vector<int>)
-        +void procesarProgramaAcademico(vector<vector<string>>, int)
-        +void calcularDatosExtra(bool)
-        +void buscarProgramas(bool, string, int)
-        +vector<vector<string>> generarMatrizEtiquetas1()
-        +vector<vector<string>> generarMatrizEtiquetas2()
-        +vector<vector<string>> generarMatrizEtiquetas3()
-        +void procesarDatos(vector<vector<string>>, int&, int&, bool)
-    }
-
-    class GestorCsv {
-        +GestorCsv()
-        +vector<int> leerProgramasCsv(string) const
-        +vector<vector<string>> leerArchivoPrimera(string, string, vector<int>) const
-        +vector<vector<string>> leerArchivoSegunda(string, string, vector<int>) const
-        +vector<vector<string>> leerArchivo(string, string, vector<int>, int) const
-        +bool crearArchivo(string, map<int, ProgramaAcademico*>, vector<string>) const
-        +bool crearArchivoBuscados(string, list<ProgramaAcademico*>, vector<string>) const
-        +bool crearArchivoExtra(string, vector<vector<string>>) const
-    }
-
-    class View {
-        -SNIESController controlador
-        -bool isConvertibleToInt(string) const
-        -pair<string, string> obtenerRangoDeAnios() const
-        +View()
-        +~View() = default
-        +bool mostrarPantallaBienvenido()
-        +void mostrarDatosExtra()
-        +void buscarPorPalabraClaveYFormacion()
-        +void salir() const
-    }
-
-    class ProgramaAcademico {
-        <<abstract>>
-    }
-
-    class Consolidado {
-        <<abstract>>
-    }
-ProgramaAcademico o-- Consolidado : tiene varios
-View <.. Main : usa
-View --> SNIESController : tiene un
-SNIESController --> GestorCsv: tiene un
-SNIESController o-- Consolidado
-Consolidado <.. GestorCsv: usa
+class SNIESController {
+   -GestorCsv gestorCsv
+   -GestorJSON gestorJSON
+   -GestorTXT gestorTXT
+   -View view
+   +leerProgramasCsv()
+   +leerArchivoPrimera()
+   +leerArchivoSegunda()
+   +leerArchivo()
+   +crearArchivo()
+   +crearArchivoBuscados()
+   +crearArchivoExtra()
+   }
+   
+   class GestorCsv {
+   +leerProgramasCsv()
+   +leerArchivoPrimera()
+   +leerArchivoSegunda()
+   +leerArchivo()
+   +crearArchivo()
+   +crearArchivoBuscados()
+   +crearArchivoExtra()
+   }
+   
+   class GestorJSON {
+   +exportarJson()
+   }
+   
+   class GestorTXT {
+   +exportarTxt()
+   }
+   
+   class View {
+   +mostrarMenu()
+   +solicitarRangoAnios()
+   +mostrarResultados()
+   +exportarDatos()
+       }
+   
+   class ProgramaAcademico {
+   -int codigo
+   -string nombre
+   -vector<Consolidado> consolidados
+   +getCodigo()
+   +getNombre()
+   +getConsolidados()
+       }
+   
+   class Consolidado {
+   -int admitidos
+   -int inscritos
+   -int graduados
+   -int matriculados
+   -int matriculadosPrimerSemestre
+   +getAdmitidos()
+   +getInscritos()
+   +getGraduados()
+   +getMatriculados()
+   +getMatriculadosPrimerSemestre()
+   }
+   
+   class Settings {
+   -string rutaBase
+   -string ano
+   +getRutaBase()
+   +getAno()
+   }
+   
+   class GestorDatos {
+   +leerDatos()
+   +procesarDatos()
+   +exportarDatos()
+   }
+   
+   GestorDatos <|-- GestorCsv
+   GestorDatos <|-- GestorJSON
+   GestorDatos <|-- GestorTXT
+   ProgramaAcademico o-- Consolidado : tiene varios
+   View <.. Main : usa
+   View --> SNIESController : tiene un
+   SNIESController --> GestorCsv : tiene un
+   SNIESController --> GestorJSON : tiene un
+   SNIESController --> GestorTXT : tiene un
+   SNIESController o-- Consolidado
+   Consolidado <.. GestorCsv : usa
    
 ```
