@@ -163,14 +163,15 @@ classDiagram
     }
 
     ProgramaAcademico o-- Consolidado : tiene varios
-    View <.. Main : usa
-    View --> SNIESController : tiene un
-    SNIESController --> GestorArchivo : usa
+    View <.. Main 
+    View --> SNIESController 
+    SNIESController --> GestorArchivo
+    SNIESController o-- ProgramaAcademico 
+    SNIESController o-- Consolidado
     GestorCsv <|-- GestorArchivo
     GestorJSON <|-- GestorArchivo
     GestorTXT <|-- GestorArchivo
-    SNIESController o-- Consolidado
-    Consolidado <.. GestorArchivo : usa
+    Consolidado <.. GestorArchivo 
 
    
 ```
