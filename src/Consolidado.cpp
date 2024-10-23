@@ -1,11 +1,23 @@
 #include "Consolidado.h"
 #include <string>
 
+/**
+ * @class Consolidado
+ * @brief Esta clase representa un registro consolidado de datos de estudiantes.
+ *
+ * La clase Consolidado encapsula varios atributos relacionados con los datos de los estudiantes,
+ * como el género, el año, el semestre y otras estadísticas relacionadas con los estudiantes.
+ */
+
+//Constructor por defecto.
 Consolidado::Consolidado() = default;
 
+//Constructor por parámetros
 Consolidado::Consolidado(int idSexo, std::string_view sexo, int ano, int semestre, const DatosEstudiantes &datosEstudiantes)
     : idSexo(idSexo), sexo(sexo), ano(ano), semestre(semestre), datosEstudiantes(datosEstudiantes) {}
 
+
+//Getters y Setters
 int Consolidado::getIdSexo() const {
     return idSexo;
 }

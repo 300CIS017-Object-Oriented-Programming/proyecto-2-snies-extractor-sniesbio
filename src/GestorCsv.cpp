@@ -3,6 +3,11 @@
 #include <sstream>
 #include <algorithm> // Para std::find
 
+/**
+ * @class GestorCsv
+ * @brief Esta clase gestiona la lectura y escritura de archivos CSV relacionados con datos de programas académicos.
+ */
+
 // Función auxiliar para procesar una fila
 void procesarFila(const std::string &fila, std::vector<std::string> &vectorFila, const std::string &delimitador, int limiteColumnas)
 {
@@ -103,7 +108,7 @@ std::vector<std::vector<std::string>> GestorCsv::leerArchivoPrimera(const std::s
     archivo.close();
     return matrizResultado;
 }
-
+// Metodo para leer el archivo del segundo conjunto de datos (matriculados)
 std::vector<std::vector<std::string>> GestorCsv::leerArchivoSegunda(const std::string &rutaBase, const std::string &ano, const std::vector<int> &codigosSnies) const
 {
     return leerArchivoPrimera(rutaBase, ano, codigosSnies);  // Reutilizamos la lógica para evitar duplicación

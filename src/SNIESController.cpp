@@ -9,12 +9,23 @@
 #include <execution>    // For parallel algorithms
 #include <exception>    // For std::exception
 
+/**
+ * @class SNIESController
+ * @brief Esta clase gestiona la lectura, procesamiento y escritura de datos CSV relacionados con programas académicos.
+ *
+ * La clase SNIESController utiliza la clase GestorCsv para leer y escribir archivos CSV. También maneja la lógica
+ * para procesar los datos de los programas académicos y generar archivos de salida con los resultados.
+ */
+
+// Constructor por parámetros
 SNIESController::SNIESController(const std::string &nuevaRutaProgramasCSV, const std::string &nuevaRutaAdmitidos, const std::string &nuevaRutaGraduados, const std::string &nuevaRutaInscritos, const std::string &nuevaRutaMatriculadosc, const std::string &nuevaRutaMatriculadosPrimerSemestre, const std::string &nuevaRutaOutput)
     : gestorCsvObj(), rutaProgramasCSV(nuevaRutaProgramasCSV), rutaAdmitidos(nuevaRutaAdmitidos), rutaGraduados(nuevaRutaGraduados), rutaInscritos(nuevaRutaInscritos), rutaMatriculados(nuevaRutaMatriculadosc), rutaMatriculadosPrimerSemestre(nuevaRutaMatriculadosPrimerSemestre), rutaOutput(nuevaRutaOutput)
 {
 }
+// Destructor por defecto
 SNIESController::~SNIESController() =default;
 
+// Función para procesar los datos CSV
 void SNIESController::procesarDatosCsv(const std::string &ano1, const std::string &ano2)
 {
     std::vector<int> codigosSnies;
@@ -107,7 +118,7 @@ std::vector<int> SNIESController::leerCodigosSnies() {
         return {};
     }
 }
-
+// Función para leer los datos del primer archivo. Retorna una matriz de datos leidos
 std::vector<std::vector<std::string>> SNIESController::leerDatosPrimera(std::string_view ano1, const std::vector<int>& codigosSnies) {
     try {
         return gestorCsvObj.leerArchivoPrimera(rutaAdmitidos, std::string(ano1), codigosSnies);
@@ -116,7 +127,7 @@ std::vector<std::vector<std::string>> SNIESController::leerDatosPrimera(std::str
         return {};
     }
 }
-
+// Función para procesar un programa académico
 void SNIESController::procesarProgramaAcademico(const std::vector<std::vector<std::string>>& datos, int i) {
     auto programaAcademico = std::make_unique<ProgramaAcademico>();
     try {
@@ -128,7 +139,7 @@ void SNIESController::procesarProgramaAcademico(const std::vector<std::vector<st
     }
     programasAcademicos.emplace(programaAcademico->getCodigoSniesDelPrograma(), std::move(programaAcademico).get());
 }
-
+// Función para buscar programas académicos
 void SNIESController::buscarProgramas(bool flag, const std::string &palabraClave, int idComparacion)
 {
     std::list<ProgramaAcademico *> listaProgramas;
@@ -150,7 +161,7 @@ void SNIESController::buscarProgramas(bool flag, const std::string &palabraClave
     }
 }
 
-
+// Función para calcular datos adicionales
 void SNIESController::calcularDatosExtra(bool flag)
 {
     std::vector<std::vector<std::string>> matrizFinal;
@@ -167,6 +178,16 @@ void SNIESController::calcularDatosExtra(bool flag)
         gestorCsvObj.crearArchivoExtra(rutaOutput, matrizFinal);
     }
 }
+
+
+/**
+* La función generarMatrizEtiquetas crea una matriz que contiene etiquetas para la suma de alumnos
+* matriculados en los programas seleccionados. Inicializa un std::vector de std::vector<std::string> para
+* contener la matriz y luego define un std::vector<std::string> llamado etiquetas1 con dos etiquetas:
+* «Suma Estudiantes Matriculados de Programas Seleccionados (Presencial o Virtual) Primer año» y “Suma
+* Estudiantes Matriculados )”.
+
+ */
 
 std::vector<std::vector<std::string>> SNIESController::generarMatrizEtiquetas1() {
     std::vector<std::vector<std::string>> matrizEtiquetas1;
@@ -197,6 +218,13 @@ std::vector<std::vector<std::string>> SNIESController::generarMatrizEtiquetas3()
     return matrizEtiquetas3;
 }
 
+/**
+*La función procesarDatos de la clase SNIESController procesa los datos de los programas académicos para generar
+*matrices de etiquetas y sumas de alumnos matriculados. Recorre los programas académicos, calcula las sumas y
+*diferencias de nuevos alumnos (NEOS) para los años especificados y genera matrices para diferentes informes. Si el
+*parámetro flag es true, crea un fichero de salida con los datos procesados.
+
+ */
 void SNIESController::procesarDatos(const std::vector<std::vector<std::string>>& matrizEtiquetas1, int& sumaPrimerAno, int& sumaSegundoAno, bool flag)
 {
     std::vector<std::vector<std::string>> matrizFinal;

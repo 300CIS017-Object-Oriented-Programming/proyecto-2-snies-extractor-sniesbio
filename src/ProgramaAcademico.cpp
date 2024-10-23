@@ -1,6 +1,14 @@
 #include "ProgramaAcademico.h"
 #include <iostream>
-
+/**
+ * @class ProgramaAcademico
+ * @brief Esta clase representa un programa académico con sus respectivos datos y consolidado.
+ *
+ * La clase ProgramaAcademico encapsula varios atributos relacionados con los programas académicos,
+ * como el código de la institución, el sector, el nivel académico, entre otros. También maneja un
+ * conjunto de objetos Consolidado.
+ */
+// Constructor por defecto
 ProgramaAcademico::ProgramaAcademico() : consolidados(8) {}
 
 // Setters y Getters refactorizados con std::string_view en setters
@@ -127,7 +135,8 @@ const std::string &ProgramaAcademico::getMunicipioDeDomicilioDeLaIes() const
 void ProgramaAcademico::setCodigoSniesDelPrograma(int nuevoCodigoSniesDelPrograma) {
     try {
         codigoSniesDelPrograma = nuevoCodigoSniesDelPrograma;
-    } catch (const std::invalid_argument &) {
+    }
+    catch (const std::invalid_argument &) {
         std::cerr << "Error: El código SNIES proporcionado no es válido." << std::endl;
     } catch (const std::out_of_range &) {
         std::cerr << "Error: El código SNIES está fuera del rango permitido." << std::endl;
@@ -348,7 +357,7 @@ const std::string &ProgramaAcademico::getMunicipioDeOfertaDelPrograma() const
 {
     return municipioDeOfertaDelPrograma;
 }
-
+// Función para agregar un consolidado
 void ProgramaAcademico::setConsolidado(std::unique_ptr<Consolidado> nuevoConsolidado, int pos) {
     try {
         consolidados.at(pos) = std::move(nuevoConsolidado);
@@ -356,7 +365,7 @@ void ProgramaAcademico::setConsolidado(std::unique_ptr<Consolidado> nuevoConsoli
         std::cerr << "Error: Posición fuera de rango al intentar establecer un consolidado." << std::endl;
     }
 }
-
+// Función  para obtener un consolidado
 Consolidado *ProgramaAcademico::getConsolidado(int posicionConsolidado) const {
     try {
         return consolidados.at(posicionConsolidado).get();
