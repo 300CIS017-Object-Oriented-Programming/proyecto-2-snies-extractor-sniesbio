@@ -7,7 +7,7 @@
  * @brief Esta clase gestiona la lectura y escritura de archivos de texto. Clase padre
  */
 // Método de ayuda para manejar errores comunes
-void GestorArchivo::manejarErrores(const std::string& mensaje) {
+void GestorArchivo::manejarErrores(const std::string& mensaje) const {
     std::cerr << "Error: " << mensaje << std::endl;
 
     std::ofstream logFile("error_log.txt", std::ios::app); // Abrir en modo append para no sobrescribir
