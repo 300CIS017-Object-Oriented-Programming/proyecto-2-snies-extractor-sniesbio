@@ -1,5 +1,5 @@
 #include "View.h"
-#include "Settings.h"  // Supuesta cabecera para cargar las rutas de configuración
+#include "Settings.h"
 #include <iostream>
 #include <utility>
 #include "Settings.h"
