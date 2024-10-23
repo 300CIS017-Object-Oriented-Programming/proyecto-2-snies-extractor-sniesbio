@@ -23,23 +23,26 @@ private:
     std::string rutaMatriculadosPrimerSemestre;
     std::string rutaOutput;
 
+    void procesarNuevoPrograma(const std::vector<std::vector<std::string>>& programasAcademicosVector, size_t i, int codigoSnies);
+    void actualizarConsolidadosExistentes(ProgramaAcademico* programaAcademico, const std::vector<std::vector<std::string>>& programasAcademicosVector, size_t i) const;
+
 public:
     SNIESController() = default;
     SNIESController(const std::string &, const std::string &, const std::string &, const std::string &, const std::string &, const std::string &, const std::string &);
     ~SNIESController();
 
-    void procesarDatosCsv(const std::string &ano1, const std::string &ano2);
-    std::vector<int> leerCodigosSnies();
-    std::vector<std::vector<std::string>> leerDatosPrimera(std::string_view ano1, const std::vector<int>& codigosSnies);
-    void procesarProgramaAcademico(const std::vector<std::vector<std::string>>& datos, int i);
-    void calcularDatosExtra(bool);
-    void buscarProgramas(bool, const std::string &, int);
+    std::map<std::string, int, std::less<>> mapearColumnas(const std::string& encabezado, const std::string& delimitador) const;
 
-    // Declaraciones de las nuevas funciones
-    std::vector<std::vector<std::string>> generarMatrizEtiquetas1();
-    std::vector<std::vector<std::string>> generarMatrizEtiquetas2();
-    std::vector<std::vector<std::string>> generarMatrizEtiquetas3();
-    void procesarDatos(const std::vector<std::vector<std::string>>& matrizEtiquetas1, int& sumaPrimerAno, int& sumaSegundoAno, bool flag); // Updated declaration
+    void procesarDatosCsv(const std::string &ano1, const std::string &ano2);
+    std::vector<int> leerCodigosSnies() const;
+    std::vector<std::vector<std::string>> leerDatosPrimera(std::string_view ano1, const std::vector<int>& codigosSnies) const;
+    void calcularDatosExtra(bool) const;
+    void buscarProgramas(bool flag, std::string_view palabraClave, int idComparacion) const;
+
+    std::vector<std::vector<std::string>> generarMatrizEtiquetas1() const;
+    std::vector<std::vector<std::string>> generarMatrizEtiquetas2() const;
+    std::vector<std::vector<std::string>> generarMatrizEtiquetas3() const;
+    void procesarDatos(int& sumaPrimerAno, int& sumaSegundoAno, bool flag) const;
 };
 
 #endif

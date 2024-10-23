@@ -151,8 +151,8 @@ public:
     const std::string &getMunicipioDeOfertaDelPrograma() const;
 
     void setConsolidado(std::unique_ptr<Consolidado> nuevoConsolidado, int pos);
-    Consolidado *getConsolidado(int) const;
-
+    Consolidado* getConsolidado(int);
+    const Consolidado* getConsolidado(int) const;
     ~ProgramaAcademico() = default;
 };
 

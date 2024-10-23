@@ -106,7 +106,7 @@ void View::buscarPorPalabraClaveYFormacion() {
                 std::cin >> idFormacionAcademica;
             }
 
-            controlador.buscarProgramas(convertirCSV, palabraClave, idFormacionAcademica);
+            controlador.buscarProgramas(convertirCSV, std::string_view(palabraClave), idFormacionAcademica);
         }
     }
 }

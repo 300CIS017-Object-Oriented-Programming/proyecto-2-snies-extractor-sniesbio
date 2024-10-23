@@ -357,7 +357,16 @@ void ProgramaAcademico::setConsolidado(std::unique_ptr<Consolidado> nuevoConsoli
     }
 }
 
-Consolidado *ProgramaAcademico::getConsolidado(int posicionConsolidado) const {
+Consolidado* ProgramaAcademico::getConsolidado(int posicionConsolidado) {
+    try {
+        return consolidados.at(posicionConsolidado).get();
+    } catch (const std::out_of_range &) {
+        std::cerr << "Error: Posición fuera de rango al intentar obtener un consolidado." << std::endl;
+        return nullptr;
+    }
+}
+
+const Consolidado* ProgramaAcademico::getConsolidado(int posicionConsolidado) const {
     try {
         return consolidados.at(posicionConsolidado).get();
     } catch (const std::out_of_range &) {
