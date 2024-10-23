@@ -106,12 +106,33 @@ classDiagram
         +void procesarDatos(vector<vector<string>>, int&, int&, bool)
     }
 
+    class GestorDatos {
+        <<abstract>>
+        +bool crearArchivo(string, map<int, ProgramaAcademico*>, vector<string>) const
+        +bool crearArchivoBuscados(string, list<ProgramaAcademico*>, vector<string>) const
+        +bool crearArchivoExtra(string, vector<vector<string>>) const
+    }
+
     class GestorCsv {
         +GestorCsv()
         +vector<int> leerProgramasCsv(string) const
         +vector<vector<string>> leerArchivoPrimera(string, string, vector<int>) const
         +vector<vector<string>> leerArchivoSegunda(string, string, vector<int>) const
         +vector<vector<string>> leerArchivo(string, string, vector<int>, int) const
+        +bool crearArchivo(string, map<int, ProgramaAcademico*>, vector<string>) const
+        +bool crearArchivoBuscados(string, list<ProgramaAcademico*>, vector<string>) const
+        +bool crearArchivoExtra(string, vector<vector<string>>) const
+    }
+
+    class GestorTxt {
+        +GestorTxt()
+        +bool crearArchivo(string, map<int, ProgramaAcademico*>, vector<string>) const
+        +bool crearArchivoBuscados(string, list<ProgramaAcademico*>, vector<string>) const
+        +bool crearArchivoExtra(string, vector<vector<string>>) const
+    }
+
+    class GestorJson {
+        +GestorJson()
         +bool crearArchivo(string, map<int, ProgramaAcademico*>, vector<string>) const
         +bool crearArchivoBuscados(string, list<ProgramaAcademico*>, vector<string>) const
         +bool crearArchivoExtra(string, vector<vector<string>>) const
@@ -136,11 +157,16 @@ classDiagram
     class Consolidado {
         <<abstract>>
     }
-ProgramaAcademico o-- Consolidado : tiene varios
-View <.. Main : usa
-View --> SNIESController : tiene un
-SNIESController --> GestorCsv: tiene un
-SNIESController o-- Consolidado
-Consolidado <.. GestorCsv: usa
+
+    ProgramaAcademico o-- Consolidado : tiene varios
+    View <.. Main : usa
+    View --> SNIESController : tiene un
+    SNIESController --> GestorCsv : usa
+    SNIESController o-- Consolidado
+    Consolidado <.. GestorCsv : usa
+    GestorCsv <|-- GestorDatos
+    GestorTxt <|-- GestorDatos
+    GestorJson <|-- GestorDatos
+
    
 ```
