@@ -106,8 +106,8 @@ classDiagram
         +void procesarDatos(vector<vector<string>>, int&, int&, bool)
     }
 
-    class GestorDatos {
-        <<abstract>>
+    class GestorArchivo {
+        +void exportarDatos(string, vector<map<string, string>>)
         +bool crearArchivo(string, map<int, ProgramaAcademico*>, vector<string>) const
         +bool crearArchivoBuscados(string, list<ProgramaAcademico*>, vector<string>) const
         +bool crearArchivoExtra(string, vector<vector<string>>) const
@@ -124,15 +124,15 @@ classDiagram
         +bool crearArchivoExtra(string, vector<vector<string>>) const
     }
 
-    class GestorTxt {
-        +GestorTxt()
+    class GestorJSON {
+        +GestorJSON()
         +bool crearArchivo(string, map<int, ProgramaAcademico*>, vector<string>) const
         +bool crearArchivoBuscados(string, list<ProgramaAcademico*>, vector<string>) const
         +bool crearArchivoExtra(string, vector<vector<string>>) const
     }
 
-    class GestorJson {
-        +GestorJson()
+    class GestorTXT {
+        +GestorTXT()
         +bool crearArchivo(string, map<int, ProgramaAcademico*>, vector<string>) const
         +bool crearArchivoBuscados(string, list<ProgramaAcademico*>, vector<string>) const
         +bool crearArchivoExtra(string, vector<vector<string>>) const
@@ -151,22 +151,26 @@ classDiagram
     }
 
     class ProgramaAcademico {
-        <<abstract>>
+        +int getCodigoDeLaInstitucion()
+        +string getProgramaAcademico()
+        +Consolidado* getConsolidado(int)
     }
 
     class Consolidado {
-        <<abstract>>
+        +int getAdmitidos() const
+        +int getGraduados() const
+        +int getMatriculados() const
     }
 
     ProgramaAcademico o-- Consolidado : tiene varios
     View <.. Main : usa
     View --> SNIESController : tiene un
-    SNIESController --> GestorCsv : usa
+    SNIESController --> GestorArchivo : usa
+    GestorCsv <|-- GestorArchivo
+    GestorJSON <|-- GestorArchivo
+    GestorTXT <|-- GestorArchivo
     SNIESController o-- Consolidado
-    Consolidado <.. GestorCsv : usa
-    GestorCsv <|-- GestorDatos
-    GestorTxt <|-- GestorDatos
-    GestorJson <|-- GestorDatos
+    Consolidado <.. GestorArchivo : usa
 
    
 ```
