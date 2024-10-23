@@ -33,6 +33,35 @@ En este proyecto se utilizarán 5 clases para cumplir el propósito de extraer l
 
 Más abajo podrán encontrar el diagrama UML de las clases.
 
+Creación de la clase GestorDatos:
+Se implementó una nueva clase base llamada GestorDatos. Esta clase actúa como padre de GestorCsv, GestorJson, y GestorTxt, proporcionando una estructura común para la gestión de archivos.
+
+Refactorización del diagrama de clases:
+Se realizaron modificaciones en el diagrama UML, agregando las clases GestorJson y GestorDatos. La clase GestorDatos fue definida como la clase padre para las demás clases gestoras de archivos.
+
+Implementación de la clase GestorJson:
+Se creó una nueva clase encargada de la exportación de datos en formato .json, implementando funcionalidades específicas para manejar este tipo de archivos.
+
+Implementación de la clase GestorTxt:
+Se añadió una nueva clase para exportar datos en formato .txt, asegurando una estructura consistente con las otras clases gestoras.
+
+Refactorización del método de exportación de archivos:
+Aunque no existe un método específico llamado exportarDatos, se realizaron ajustes en los métodos encargados de la exportación de archivos (como crearArchivo, crearArchivoBuscados y crearArchivoExtra), corrigiendo encabezados y mejorando la gestión de errores conforme a las recomendaciones de SonarLint.
+
+Modificación de los prototipos de clases:
+Se realizaron modificaciones en los atributos y métodos de las clases Consolidado, ProgramaAcademico, GestorCSV, y SNIESController para mejorar la cohesión interna, reducir la complejidad y eliminar dependencias innecesarias.
+
+Refactorización de las clases Consolidado y ProgramaAcademico:
+Se aplicaron principios de diseño GRASP para mejorar la estructura de las clases Consolidado y ProgramaAcademico, facilitando su mantenimiento y evolución.
+
+Creación de la clase Settings:
+Se añadió una nueva clase Settings, que permite la configuración flexible de parámetros por parte del usuario, centralizando las opciones del proyecto.
+
+Implementación de métodos auxiliares en las clases ProgramaAcademico y Consolidado:
+Se añadieron métodos auxiliares a estas clases para apoyar en la implementación de diversas operaciones, facilitando la integración con otras clases.
+
+Corrección de errores en GestorCSV:
+Se solucionaron varios problemas en la clase GestorCSV, incluyendo la inclusión de using namespace std; para resolver conflictos de espacio de nombres.
 
 # Diagrama Mermaid
 
