@@ -12,6 +12,7 @@
 class SNIESController
 {
 private:
+
     std::map<int, ProgramaAcademico *> programasAcademicos;
     GestorCsv gestorCsvObj;
     std::vector<std::string> etiquetasColumnas;
@@ -24,10 +25,14 @@ private:
     std::string rutaOutput;
 
 public:
+    // Constructor por defecto
     SNIESController() = default;
+    // Constructor con parámetros
     SNIESController(const std::string &, const std::string &, const std::string &, const std::string &, const std::string &, const std::string &, const std::string &);
+    // Destructor
     ~SNIESController();
 
+    // Getters y setters
     void procesarDatosCsv(const std::string &ano1, const std::string &ano2);
     std::vector<int> leerCodigosSnies();
     std::vector<std::vector<std::string>> leerDatosPrimera(std::string_view ano1, const std::vector<int>& codigosSnies);

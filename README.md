@@ -1,4 +1,130 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/QApazJy0)
+classDiagram
+    class SNIESController {
+        -map<int, ProgramaAcademico*> programasAcademicos
+        -GestorCsv gestorCsvObj
+        -vector<string> etiquetasColumnas
+        -string rutaProgramasCSV
+        -string rutaAdmitidos
+        -string rutaGraduados
+        -string rutaInscritos
+        -string rutaMatriculados
+        -string rutaMatriculadosPrimerSemestre
+        -string rutaOutput
+        +SNIESController()
+        +SNIESController(string, string, string, string, string, string, string)
+        +~SNIESController()
+        +void procesarDatosCsv(string, string)
+        +vector<int> leerCodigosSnies()
+        +vector<vector<string>> leerDatosPrimera(string_view, vector<int>)
+        +void procesarProgramaAcademico(vector<vector<string>>, int)
+        +void calcularDatosExtra(bool)
+        +void buscarProgramas(bool, string, int)
+        +vector<vector<string>> generarMatrizEtiquetas1()
+        +vector<vector<string>> generarMatrizEtiquetas2()
+        +vector<vector<string>> generarMatrizEtiquetas3()
+        +void procesarDatos(vector<vector<string>>, int&, int&, bool)
+    }
+
+    class GestorCsv {
+        +GestorCsv()
+        +vector<int> leerProgramasCsv(string) const
+        +vector<vector<string>> leerArchivoPrimera(string, string, vector<int>) const
+        +vector<vector<string>> leerArchivoSegunda(string, string, vector<int>) const
+        +vector<vector<string>> leerArchivo(string, string, vector<int>, int) const
+        +bool crearArchivo(string, map<int, ProgramaAcademico*>, vector<string>) const
+        +bool crearArchivoBuscados(string, list<ProgramaAcademico*>, vector<string>) const
+        +bool crearArchivoExtra(string, vector<vector<string>>) const
+    }
+
+    class View {
+        -SNIESController controlador
+        -bool isConvertibleToInt(string) const
+        -pair<string, string> obtenerRangoDeAnios() const
+        +View()
+        +~View() = default
+        +bool mostrarPantallaBienvenido()
+        +void mostrarDatosExtra()
+        +void buscarPorPalabraClaveYFormacion()
+        +void salir() const
+    }
+
+    class ProgramaAcademico {
+        <<abstract>>
+    }
+
+    class Consolidado {
+        <<abstract>>
+    }
+
+    SNIESController --> GestorCsv
+    View --> SNIESController
+    GestorCsv --> ProgramaAcademico
+    GestorCsv --> Consolidado
+    SNIESController --> ProgramaAcademico
+    SNIESController --> ConsolidadoclassDiagram
+    class SNIESController {
+        -map<int, ProgramaAcademico*> programasAcademicos
+        -GestorCsv gestorCsvObj
+        -vector<string> etiquetasColumnas
+        -string rutaProgramasCSV
+        -string rutaAdmitidos
+        -string rutaGraduados
+        -string rutaInscritos
+        -string rutaMatriculados
+        -string rutaMatriculadosPrimerSemestre
+        -string rutaOutput
+        +SNIESController()
+        +SNIESController(string, string, string, string, string, string, string)
+        +~SNIESController()
+        +void procesarDatosCsv(string, string)
+        +vector<int> leerCodigosSnies()
+        +vector<vector<string>> leerDatosPrimera(string_view, vector<int>)
+        +void procesarProgramaAcademico(vector<vector<string>>, int)
+        +void calcularDatosExtra(bool)
+        +void buscarProgramas(bool, string, int)
+        +vector<vector<string>> generarMatrizEtiquetas1()
+        +vector<vector<string>> generarMatrizEtiquetas2()
+        +vector<vector<string>> generarMatrizEtiquetas3()
+        +void procesarDatos(vector<vector<string>>, int&, int&, bool)
+    }
+
+    class GestorCsv {
+        +GestorCsv()
+        +vector<int> leerProgramasCsv(string) const
+        +vector<vector<string>> leerArchivoPrimera(string, string, vector<int>) const
+        +vector<vector<string>> leerArchivoSegunda(string, string, vector<int>) const
+        +vector<vector<string>> leerArchivo(string, string, vector<int>, int) const
+        +bool crearArchivo(string, map<int, ProgramaAcademico*>, vector<string>) const
+        +bool crearArchivoBuscados(string, list<ProgramaAcademico*>, vector<string>) const
+        +bool crearArchivoExtra(string, vector<vector<string>>) const
+    }
+
+    class View {
+        -SNIESController controlador
+        -bool isConvertibleToInt(string) const
+        -pair<string, string> obtenerRangoDeAnios() const
+        +View()
+        +~View() = default
+        +bool mostrarPantallaBienvenido()
+        +void mostrarDatosExtra()
+        +void buscarPorPalabraClaveYFormacion()
+        +void salir() const
+    }
+
+    class ProgramaAcademico {
+        <<abstract>>
+    }
+
+    class Consolidado {
+        <<abstract>>
+    }
+
+    SNIESController --> GestorCsv
+    View --> SNIESController
+    GestorCsv --> ProgramaAcademico
+    GestorCsv --> Consolidado
+    SNIESController --> ProgramaAcademico
+    SNIESController --> Consolidado[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/QApazJy0)
 
 ## SNIES Extractor
 Gracias al grupo que me presetó el código fuente de este proyecto

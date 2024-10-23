@@ -2,6 +2,9 @@
 #define CONSOLIDADO_H
 
 #include <string>
+
+// Estructura que encapsula los datos de los estudiantes.
+
 struct DatosEstudiantes {
     int inscritos;
     int admitidos;
@@ -9,6 +12,7 @@ struct DatosEstudiantes {
     int matriculadosPrimerSemestre;
     int graduados;
 };
+// Clase que encapsula los datos consolidados de los estudiantes.
 
 class Consolidado {
 private:
@@ -19,8 +23,11 @@ private:
     DatosEstudiantes datosEstudiantes;
 
 public:
+    // Constructores
     Consolidado();
     Consolidado(int idSexo, std::string_view sexo, int ano, int semestre, const DatosEstudiantes &datosEstudiantes);
+
+    // Getters y setters
 
     int getIdSexo() const;
     void setIdSexo(int idSexo);

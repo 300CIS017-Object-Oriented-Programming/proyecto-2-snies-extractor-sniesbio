@@ -6,7 +6,14 @@
 #include <string_view>
 #include <memory>
 #include "Consolidado.h"
-
+/**
+ * @class ProgramaAcademico
+ * @brief Esta clase representa un programa académico con sus respectivos datos y consolidado.
+ *
+ * La clase ProgramaAcademico encapsula varios atributos relacionados con los programas académicos,
+ * como el código de la institución, el sector, el nivel académico, entre otros. También maneja un
+ * conjunto de objetos Consolidado.
+ */
 class ProgramaAcademico
 {
     int codigoDeLaInstitucion;
@@ -46,8 +53,9 @@ class ProgramaAcademico
     std::vector<std::unique_ptr<Consolidado>> consolidados;
 
 public:
+    // Constructor por defecto
     ProgramaAcademico();
-
+    // Setters y Getters refactorizados con std::string_view en setters
     void setCodigoDeLaInstitucion(int);
     int getCodigoDeLaInstitucion() const;
 
