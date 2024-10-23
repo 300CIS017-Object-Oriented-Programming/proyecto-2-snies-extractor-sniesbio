@@ -1,25 +1,28 @@
-#ifndef GESTORTXT_H
-#define GESTORTXT_H
+#ifndef GESTORJSON_H
+#define GESTORJSON_H
 
 #include "GestorArchivo.h"
 #include <map>
 #include <list>
 #include <vector>
 #include <string>
+#include "json.hpp"
+
+using json = nlohmann::json;
 
 /**
- * @class GestorTXT
- * @brief Clase hija que gestiona la creación de archivos en formato TXT.
+ * @class GestorJSON
+ * @brief Clase hija que gestiona la creación de archivos en formato JSON.
  */
-class GestorTXT : public GestorArchivo {
+class GestorJSON : public GestorArchivo {
 public:
-    // Crear un archivo TXT con los datos de los programas académicos
+    // Crear un archivo JSON con los datos de los programas académicos
     bool crearArchivo(const std::string &ruta, const std::map<int, ProgramaAcademico *> &mapaProgramas, const std::vector<std::string> &etiquetasColumnas) const override;
 
-    // Crear un archivo TXT con los datos de los programas buscados
+    // Crear un archivo JSON con los datos de los programas buscados
     bool crearArchivoBuscados(const std::string &ruta, const std::list<ProgramaAcademico *> &programasBuscados, const std::vector<std::string> &etiquetasColumnas) const override;
 
-    // Crear un archivo TXT con datos adicionales
+    // Crear un archivo JSON con datos adicionales
     bool crearArchivoExtra(const std::string &ruta, const std::vector<std::vector<std::string>> &datosAImprimir) const override;
 
 private:
@@ -27,4 +30,4 @@ private:
     using GestorArchivo::manejarErrores;
 };
 
-#endif // GESTORTXT_H
+#endif // GESTORJSON_H

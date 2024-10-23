@@ -65,6 +65,7 @@ Se añadieron métodos auxiliares a estas clases para apoyar en la implementaci�
 10. Corrección de errores en GestorCSV:
 Se solucionaron varios problemas en la clase GestorCSV, incluyendo la inclusión de using namespace std; para resolver conflictos de espacio de nombres.
 
+
 # Diagrama Mermaid
 
 *El vector de Consolidados tendrá siempre 8 posiciones [0-7] donde:*
@@ -80,7 +81,7 @@ Se solucionaron varios problemas en la clase GestorCSV, incluyendo la inclusión
 ###Diagrama actualizado
 ```mermaid
 classDiagram
-    class SNIESController {
+  class SNIESController {
         -map<int, ProgramaAcademico*> programasAcademicos
         -GestorCsv gestorCsvObj
         -vector<string> etiquetasColumnas
@@ -172,6 +173,7 @@ classDiagram
     GestorJSON <|-- GestorArchivo
     GestorTXT <|-- GestorArchivo
     Consolidado <.. GestorArchivo 
+
 
    
 ```
