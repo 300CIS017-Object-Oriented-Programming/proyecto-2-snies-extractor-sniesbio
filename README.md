@@ -105,6 +105,11 @@ classDiagram
     class Consolidado {
         <<abstract>>
     }
-
+ProgramaAcademico o-- Consolidado : tiene varios
+View <.. Main : usa
+View --> SNIESController : tiene un
+SNIESController --> GestorCsv: tiene un
+SNIESController o-- Consolidado
+Consolidado <.. GestorCsv: usa
    
 ```
