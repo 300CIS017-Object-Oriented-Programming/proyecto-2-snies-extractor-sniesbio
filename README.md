@@ -33,6 +33,38 @@ En este proyecto se utilizarán 5 clases para cumplir el propósito de extraer l
 
 Más abajo podrán encontrar el diagrama UML de las clases.
 
+## Refactorización y correcciones realizadas 
+
+1.Creación de la clase GestorDatos:
+Se implementó una nueva clase base llamada GestorDatos. Esta clase actúa como padre de GestorCsv, GestorJson, y GestorTxt, proporcionando una estructura común para la gestión de archivos.
+
+2. Refactorización del diagrama de clases:
+Se realizaron modificaciones en el diagrama UML, agregando las clases GestorJson y GestorDatos. La clase GestorDatos fue definida como la clase padre para las demás clases gestoras de archivos.
+
+3. Implementación de la clase GestorJson:
+Se creó una nueva clase encargada de la exportación de datos en formato .json, implementando funcionalidades específicas para manejar este tipo de archivos.
+
+4. Implementación de la clase GestorTxt:
+Se añadió una nueva clase para exportar datos en formato .txt, asegurando una estructura consistente con las otras clases gestoras.
+
+5. Refactorización del método de exportación de archivos:
+Aunque no existe un método específico llamado exportarDatos, se realizaron ajustes en los métodos encargados de la exportación de archivos (como crearArchivo, crearArchivoBuscados y crearArchivoExtra), corrigiendo encabezados y mejorando la gestión de errores conforme a las recomendaciones de SonarLint.
+
+6. Modificación de los prototipos de clases:
+Se realizaron modificaciones en los atributos y métodos de las clases Consolidado, ProgramaAcademico, GestorCSV, y SNIESController para mejorar la cohesión interna, reducir la complejidad y eliminar dependencias innecesarias.
+
+7. Refactorización de las clases Consolidado y ProgramaAcademico:
+Se aplicaron principios de diseño GRASP para mejorar la estructura de las clases Consolidado y ProgramaAcademico, facilitando su mantenimiento y evolución.
+
+8. Creación de la clase Settings:
+Se añadió una nueva clase Settings, que permite la configuración flexible de parámetros por parte del usuario, centralizando las opciones del proyecto.
+
+9. Implementación de métodos auxiliares en las clases ProgramaAcademico y Consolidado:
+Se añadieron métodos auxiliares a estas clases para apoyar en la implementación de diversas operaciones, facilitando la integración con otras clases.
+
+10. Corrección de errores en GestorCSV:
+Se solucionaron varios problemas en la clase GestorCSV, incluyendo la inclusión de using namespace std; para resolver conflictos de espacio de nombres.
+
 
 # Diagrama Mermaid
 
@@ -45,192 +77,103 @@ Más abajo podrán encontrar el diagrama UML de las clases.
 *vector[5] es segundo año, segundo semestre, hombres*
 *vector[6] es segundo año, primer semestre, mujeres*
 *vector[7] es segundo año, segundo semestre, mujeres*
+
+###Diagrama actualizado
 ```mermaid
 classDiagram
-direction BT
-    class ProgramaAcademico {
-        -int codigoDeLaInstitucion
-        -int iesPadre
-        -string institucionDeEducacionSuperiorIes
-        -string principalOSeccional
-        -int idSectorIes
-        -string sectorIes
-        -int idCaracter
-        -string caracterIes
-        -int codigoDelDepartamentoIes
-        -string departamentoDeDomicilioDeLaIes
-        -int codigoDelMunicipioIes
-        -string municipioDeDomicilioDeLaIes
-        -int codigoSniesDelPrograma
-        -string programaAcademico
-        -int idNivelAcademico
-        -string nivelAcademico
-        -int idNivelDeFormacion
-        -string nivelDeFormacion
-        -int idMetodologia
-        -string metodologia
-        -int idArea
-        -string areaDeConocimiento
-        -int idNucleo
-        -string nucleoBasicoDelConocimientoNbc
-        -int idCineCampoAmplio
-        -string descCineCampoAmplio
-        -int idCineCampoEspecifico
-        -string descCineCampoEspecifico
-        -int idCineCodigoDetallado
-        -string descCineCodigoDetallado
-        -int codigoDelDepartamentoPrograma
-        -string departamentoDeOfertaDelPrograma
-        -int codigoDelMunicipioPrograma
-        -string municipioDeOfertaDelPrograma
-        -Vector<Consolidado*> consolidados
-        +ProgramaAcademico()
-        +~ProgramaAcademico()
-        +setCodigoDeLaInstitucion(int)
-        +setIesPadre(int)
-        +setInstitucionDeEducacionSuperiorIes(string)
-        +setPrincipalOSeccional(string)
-        +setIdSectorIes(int)
-        +setSectorIes(string)
-        +setIdCaracter(int)
-        +setCaracterIes(string)
-        +setCodigoDelDepartamentoIes(int)
-        +setDepartamentoDeDomicilioDeLaIes(string)
-        +setCodigoDelMunicipioIes(int)
-        +setMunicipioDeDomicilioDeLaIes(string)
-        +setCodigoSniesDelPrograma(int)
-        +setProgramaAcademico(string)
-        +setIdNivelAcademico(int)
-        +setNivelAcademico(string)
-        +setIdNivelDeFormacion(int)
-        +setNivelDeFormacion(string)
-        +setIdMetodologia(int)
-        +setMetodologia(string)
-        +setIdArea(int)
-        +setAreaDeConocimiento(string)
-        +setIdNucleo(int)
-        +setNucleoBasicoDelConocimientoNbc(string)
-        +setIdCineCampoAmplio(int)
-        +setDescCineCampoAmplio(string)
-        +setIdCineCampoEspecifico(int)
-        +setDescCineCampoEspecifico(string)
-        +setIdCineCodigoDetallado(int)
-        +setDescCineCodigoDetallado(string)
-        +setCodigoDelDepartamentoPrograma(int)
-        +setDepartamentoDeOfertaDelPrograma(string)
-        +setCodigoDelMunicipioPrograma(int)
-        +setMunicipioDeOfertaDelPrograma(string)
-        +getCodigoDeLaInstitucion()
-        +getIesPadre()
-        +getInstitucionDeEducacionSuperiorIes()
-        +getPrincipalOSeccional()
-        +getIdSectorIes()
-        +getSectorIes()
-        +getIdCaracter()
-        +getCaracterIes()
-        +getCodigoDelDepartamentoIes()
-        +getDepartamentoDeDomicilioDeLaIes()
-        +getCodigoDelMunicipioIes()
-        +getMunicipioDeDomicilioDeLaIes()
-        +getCodigoSniesDelPrograma()
-        +getProgramaAcademico()
-        +getIdNivelAcademico()
-        +getNivelAcademico()
-        +getIdNivelDeFormacion()
-        +getNivelDeFormacion()
-        +getIdMetodologia()
-        +getMetodologia()
-        +getIdArea()
-        +getAreaDeConocimiento()
-        +getIdNucleo()
-        +getNucleoBasicoDelConocimientoNbc()
-        +getIdCineCampoAmplio()
-        +getDescCineCampoAmplio()
-        +getIdCineCampoEspecifico()
-        +getDescCineCampoEspecifico()
-        +getIdCineCodigoDetallado()
-        +getDescCineCodigoDetallado()
-        +getCodigoDelDepartamentoPrograma()
-        +getDepartamentoDeOfertaDelPrograma()
-        +getCodigoDelMunicipioPrograma()
-        +getMunicipioDeOfertaDelPrograma()
-        +pushConsolidado(Consolidado*)
-        +getConsolidado()
-    }
-    class Consolidado {
-        -int inscritos
-        -int admitidos
-        -int matriculadosPrimerSemestre
-        -int matriculados
-        -int graduados
-        -int idSexo
-        -string sexo
-        -int ano
-        -int semestre
-        +setIdSexo(int)
-        +setSexo(string)
-        +setAno(int)
-        +setSemestre(int)
-        +getIdSexo()
-        +getSexo()
-        +getAno()
-        +getSemestre()
-        +setInscritos(int)
-        +setAdmitidos(int)
-        +setMatriculadosPrimerSemestre(int)
-        +setMatriculados(int)
-        +setGraduados(int)
-        +getInscritos()
-        +getAdmitidos()
-        +getMatriculadosPrimerSemestre()
-        +getMatriculados()
-        +getGraduados()
-    }
-    class GestorCsv {
-        +GestorCsv() = default
-        +vector<int> leerProgramasCsv(string &ruta)
-        +vector<vector<string>> leerArchivoPrimera(string &rutaBase, string &ano, vector<int> &codigosSnies)
-        +vector<vector<string>> leerArchivoSegunda(string &rutaBase, string &ano, vector<int> &codigosSnies)
-        +vector<vector<string>> leerArchivo(string &rutaBase, string &ano, vector<int> &codigosSnies, int colmunaCodigoSnies)
-        +bool crearArchivo(string &ruta, map <int, ProgramaAcademico*> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas)
-        +bool crearArchivoBuscados(string &ruta, list<ProgramaAcademico*> &programasBuscados, vector<string> etiquetasColumnas)
-        +bool crearArchivoExtra(string &ruta,vector<vector<string>> datosAImprimir)
-    }
-    class SNIESController {
-        -map <int, ProgramaAcademico*> programasAcademicos
+  class SNIESController {
+        -map<int, ProgramaAcademico*> programasAcademicos
         -GestorCsv gestorCsvObj
         -vector<string> etiquetasColumnas
-        -string rutaProgramasCsv
+        -string rutaProgramasCSV
         -string rutaAdmitidos
         -string rutaGraduados
         -string rutaInscritos
         -string rutaMatriculados
         -string rutaMatriculadosPrimerSemestre
         -string rutaOutput
-        +SNIESController("incializar con strings de rutas")
+        +SNIESController()
+        +SNIESController(string, string, string, string, string, string, string)
         +~SNIESController()
-        +void procesarDatosCsv(string &ano1, string &ano2)
+        +void procesarDatosCsv(string, string)
+        +vector<int> leerCodigosSnies()
+        +vector<vector<string>> leerDatosPrimera(string_view, vector<int>)
+        +void procesarProgramaAcademico(vector<vector<string>>, int)
         +void calcularDatosExtra(bool)
-        +void buscarProgramas(bool, string &, int)
-    }
-    class View {
-        SNIESController controlador
-        +View()
-        +~View()
-        +bool pantallaBienvenido()
-        +void visualizacionDatosExtra()
-        +void buscarPorPalabraClaveYFormacion()
-        +void salir()
-        +bool isConvetibleToInt()
-    }
-    class Main {
-        + int main()
+        +void buscarProgramas(bool, string, int)
+        +vector<vector<string>> generarMatrizEtiquetas1()
+        +vector<vector<string>> generarMatrizEtiquetas2()
+        +vector<vector<string>> generarMatrizEtiquetas3()
+        +void procesarDatos(vector<vector<string>>, int&, int&, bool)
     }
 
-ProgramaAcademico o-- Consolidado : tiene varios
-View <.. Main : usa
-View --> SNIESController : tiene un
-SNIESController --> GestorCsv: tiene un
-SNIESController o-- Consolidado
-Consolidado <.. GestorCsv: usa
+    class GestorArchivo {
+        +void exportarDatos(string, vector<map<string, string>>)
+        +bool crearArchivo(string, map<int, ProgramaAcademico*>, vector<string>) const
+        +bool crearArchivoBuscados(string, list<ProgramaAcademico*>, vector<string>) const
+        +bool crearArchivoExtra(string, vector<vector<string>>) const
+    }
+
+    class GestorCsv {
+        +GestorCsv()
+        +vector<int> leerProgramasCsv(string) const
+        +vector<vector<string>> leerArchivoPrimera(string, string, vector<int>) const
+        +vector<vector<string>> leerArchivoSegunda(string, string, vector<int>) const
+        +vector<vector<string>> leerArchivo(string, string, vector<int>, int) const
+        +bool crearArchivo(string, map<int, ProgramaAcademico*>, vector<string>) const
+        +bool crearArchivoBuscados(string, list<ProgramaAcademico*>, vector<string>) const
+        +bool crearArchivoExtra(string, vector<vector<string>>) const
+    }
+
+    class GestorJSON {
+        +GestorJSON()
+        +bool crearArchivo(string, map<int, ProgramaAcademico*>, vector<string>) const
+        +bool crearArchivoBuscados(string, list<ProgramaAcademico*>, vector<string>) const
+        +bool crearArchivoExtra(string, vector<vector<string>>) const
+    }
+
+    class GestorTXT {
+        +GestorTXT()
+        +bool crearArchivo(string, map<int, ProgramaAcademico*>, vector<string>) const
+        +bool crearArchivoBuscados(string, list<ProgramaAcademico*>, vector<string>) const
+        +bool crearArchivoExtra(string, vector<vector<string>>) const
+    }
+
+    class View {
+        -SNIESController controlador
+        -bool isConvertibleToInt(string) const
+        -pair<string, string> obtenerRangoDeAnios() const
+        +View()
+        +~View() = default
+        +bool mostrarPantallaBienvenido()
+        +void mostrarDatosExtra()
+        +void buscarPorPalabraClaveYFormacion()
+        +void salir() const
+    }
+
+    class ProgramaAcademico {
+        +int getCodigoDeLaInstitucion()
+        +string getProgramaAcademico()
+        +Consolidado* getConsolidado(int)
+    }
+
+    class Consolidado {
+        +int getAdmitidos() const
+        +int getGraduados() const
+        +int getMatriculados() const
+    }
+
+    ProgramaAcademico o-- Consolidado : tiene varios
+    View <.. Main 
+    View --> SNIESController 
+    SNIESController --> GestorArchivo
+    SNIESController o-- ProgramaAcademico 
+    SNIESController o-- Consolidado
+    GestorCsv <|-- GestorArchivo
+    GestorJSON <|-- GestorArchivo
+    GestorTXT <|-- GestorArchivo
+    Consolidado <.. GestorArchivo 
+
+
+   
 ```
